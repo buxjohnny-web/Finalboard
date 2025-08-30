@@ -10,21 +10,25 @@ return new class extends Migration
     {
         Schema::create('calculation_logs', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('calculation_id');
-            $table->unsignedBigInteger('user_id'); // who made the change
+
+            $table->foreignId('calculation_id')->constrained('calculations')->cascadeOnDelete();
+            $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
+
+            // Snapshot of fields at time of action
             $table->decimal('total_invoice', 10, 2)->nullable();
             $table->integer('parcel_rows_count')->nullable();
             $table->decimal('vehicule_rental_price', 10, 2)->nullable();
-            $table->decimal('broker_percentage', 5, 2);
+            $table->decimal('broker_percentage', 5, 2)->default(0);
             $table->decimal('bonus', 10, 2)->nullable();
             $table->decimal('cash_advance', 10, 2)->nullable();
             $table->decimal('final_amount', 10, 2)->nullable();
             $table->string('pdf_path')->nullable();
-            $table->string('action')->default('update'); // or 'create', 'delete', etc.
+
+            $table->string('action', 32)->default('update');
             $table->timestamps();
 
-            $table->foreign('calculation_id')->references('id')->on('calculations')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->index(['calculation_id']);
+            $table->index(['user_id']);
         });
     }
 

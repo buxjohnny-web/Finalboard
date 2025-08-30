@@ -53,12 +53,12 @@
             </div>
         </div>
 
-        <!-- Spinner, hidden by default -->
+        <!-- Spinner -->
         <div id="spinner" style="display:none;" class="text-center my-4">
             <div class="spinner-border text-info" role="status"></div>
         </div>
 
-        <!-- Calculation Form, initially hidden until file is uploaded -->
+        <!-- Calculation Form -->
         <form id="calculation-form" class="mt-4" style="display:none;">
             <div class="mb-3">
                 <label for="vehicule-rental-price" class="form-label">Vehicule rental price</label>
@@ -81,7 +81,7 @@
             </button>
         </form>
 
-        <!-- Alert, hidden by default -->
+        <!-- Result -->
         <div id="result-alert" style="display:none;">
             <div class="alert alert-primary alert-dismissible bg-primary text-white border-0 fade show mt-4" role="alert">
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -114,7 +114,7 @@
                 document.getElementById('myAwesomeDropzone').style.display = 'none';
                 document.getElementById('calculation-form').style.display = 'none';
                 document.getElementById('result-alert').style.display = 'none';
-                // context for controller
+
                 formData.append('driver_id', '{{ $driver->id }}');
                 formData.append('week', '{{ $week }}');
             });
@@ -132,7 +132,7 @@
                 document.getElementById('myAwesomeDropzone').style.display = '';
             }
         },
-        error: function (file, response) {
+        error: function () {
             document.getElementById('spinner').style.display = 'none';
             alert('File upload failed.');
             document.getElementById('myAwesomeDropzone').style.display = '';
@@ -166,8 +166,7 @@
                     const left  = totalInvoice * driverPercentage;
                     const right = vehiculeRental * parcelRowsCount;
 
-                    let amount = left - right + bonus - cashAdvance;
-                    finalAmount = amount;
+                    finalAmount = left - right + bonus - cashAdvance;
 
                     document.getElementById('spinner').style.display = 'none';
                     document.getElementById('final-amount').innerText = finalAmount.toFixed(2);

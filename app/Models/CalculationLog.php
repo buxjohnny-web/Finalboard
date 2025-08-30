@@ -23,7 +23,16 @@ class CalculationLog extends Model
         'action',
     ];
 
-    // Relationships
+    protected $casts = [
+        'total_invoice'         => 'decimal:2',
+        'vehicule_rental_price' => 'decimal:2',
+        'broker_percentage'     => 'decimal:2',
+        'bonus'                 => 'decimal:2',
+        'cash_advance'          => 'decimal:2',
+        'final_amount'          => 'decimal:2',
+        'parcel_rows_count'     => 'integer',
+    ];
+
     public function calculation()
     {
         return $this->belongsTo(Calculation::class);
@@ -31,6 +40,6 @@ class CalculationLog extends Model
 
     public function user()
     {
-        return $this->belongsTo(\App\Models\User::class);
+        return $this->belongsTo(User::class);
     }
 }

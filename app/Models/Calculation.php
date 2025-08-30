@@ -11,7 +11,7 @@ class Calculation extends Model
 
     protected $fillable = [
         'driver_id',
-        'week',
+        'week_number',
         'total_invoice',
         'parcel_rows_count',
         'vehicule_rental_price',
@@ -23,17 +23,16 @@ class Calculation extends Model
     ];
 
     protected $casts = [
-        'total_invoice' => 'decimal:2',
+        'total_invoice'         => 'decimal:2',
         'vehicule_rental_price' => 'decimal:2',
-        'broker_percentage' => 'decimal:2',
-        'bonus' => 'decimal:2',
-        'cash_advance' => 'decimal:2',
-        'final_amount' => 'decimal:2',
-        'parcel_rows_count' => 'integer',
-        'week' => 'string',
+        'broker_percentage'     => 'decimal:2',
+        'bonus'                 => 'decimal:2',
+        'cash_advance'          => 'decimal:2',
+        'final_amount'          => 'decimal:2',
+        'parcel_rows_count'     => 'integer',
+        'week_number'           => 'integer',
     ];
 
-    // Relationships
     public function driver()
     {
         return $this->belongsTo(Driver::class);
@@ -44,19 +43,8 @@ class Calculation extends Model
         return $this->hasMany(CalculationLog::class);
     }
 
-    // Scopes
-    public function scopeForWeek($query, string $week)
+    public function scopeForDriverAndWeek($query, int $driverId, int $weekNumber)
     {
-        return $query->where('week', $week);
-    }
-
-    public function scopeForDriver($query, int $driverId)
-    {
-        return $query->where('driver_id', $driverId);
-    }
-
-    public function scopeForDriverAndWeek($query, int $driverId, string $week)
-    {
-        return $query->where('driver_id', $driverId)->where('week', $week);
+        return $query->where('driver_id', $driverId)->where('week_number', $weekNumber);
     }
 }
