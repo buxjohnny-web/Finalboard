@@ -1,0 +1,30 @@
+<?php
+
+    return [
+        'drivers' => 'Drivers',
+        'add_driver_btn' => 'Add Driver',
+        'id' => 'ID',
+        'name' => 'Name',
+        'phone' => 'Phone',
+        'actions' => 'Actions',
+        'edit_driver' => 'Edit driver',
+        'delete_driver_btn' => 'Delete Driver',
+        'confirm_delete_driver' => 'Are you sure you want to delete this driver?',
+        's_week' => 'S. Week',
+        'w_week' => 'W. Week',
+        'intelcom_invoice' => 'Intelcom Invoice',
+        'final_amount' => 'Final Amount',
+        'benefit' => 'Benefit',
+        'calculate' => 'Calculate',
+        'add_driver' => 'Add a driver',
+        'back_to_drivers' => 'Back to drivers',
+        'full_name' => 'Full name',
+        'phone_number' => 'Phone number',
+        'driver_id' => 'Driver ID',
+        'license_number' => 'License number',
+        'ssn' => 'SSN',
+        'save_driver_btn' => 'Save Driver',
+        'home' => 'Home',
+            'calculation_for' => 'Calculation for :driver - Week: :week',
+
+    ];

@@ -1,0 +1,30 @@
+<?php
+
+    return [
+        'drivers' => 'Chauffeurs',
+        'add_driver_btn' => 'Ajouter le chauffeur',
+        'id' => 'ID',
+        'name' => 'Nom',
+        'phone' => 'Téléphone',
+        'actions' => 'Actions',
+        'edit_driver' => 'Modifier le chauffeur',
+        'delete_driver_btn' => 'Supprimer le chauffeur',
+        'confirm_delete_driver' => 'Êtes-vous sûr de vouloir supprimer ce chauffeur ?',
+        's_week' => 'S. Semaine',
+        'w_week' => 'W. Semaine',
+        'intelcom_invoice' => 'Facture Intelcom',
+        'final_amount' => 'Montant final',
+        'benefit' => 'Bénéfice',
+        'calculate' => 'Calculer',
+        'add_driver' => 'Ajouter un chauffeur',
+        'back_to_drivers' => 'Retour aux chauffeurs',
+        'full_name' => 'Nom complet',
+        'phone_number' => 'Numéro de téléphone',
+        'driver_id' => 'ID du chauffeur',
+        'license_number' => 'Numéro de permis',
+        'ssn' => 'NAS',
+        'save_driver_btn' => 'Enregistrer le chauffeur',
+        'home' => 'Accueil',
+            'calculation_for' => 'Calcul pour :driver - Semaine :week',
+
+    ];

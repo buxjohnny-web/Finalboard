@@ -1,0 +1,74 @@
+/* DataTables pagination: compact, single border, no double stroke */
+.dataTables_wrapper .dataTables_paginate .pagination {
+    justify-content: center !important;
+    margin-top: 0.6rem;
+    flex-wrap: wrap;
+    gap: 0;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    font-size: 0.92rem !important;
+    padding: 0.09rem 0.7rem !important;
+    margin: 0 2px !important;
+    border-radius: 0.18rem !important;
+    min-width: 28px;
+    border: 1px solid #e0e4e9 !important;
+    background: #fff !important;
+    color: #8c99ae !important;
+    font-weight: 500;
+    transition: all 0.15s;
+    box-shadow: none !important;
+    outline: none !important;
+    opacity: 0.85;
+    display: inline-block;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current,
+.dataTables_wrapper .dataTables_paginate .paginate_button:active {
+    background: #a3bffa !important;
+    color: #fff !important;
+    border: 1px solid #a3bffa !important; /* ensure single border */
+    font-weight: 600;
+    opacity: 1;
+    box-shadow: none !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover:not(.disabled),
+.dataTables_wrapper .dataTables_paginate .paginate_button:focus:not(.disabled) {
+    background: #eaf3ff !important;
+    color: #1867c0 !important;
+    border: 1px solid #a7c7e7 !important;
+    opacity: 1;
+    box-shadow: none !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled,
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover,
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled:focus {
+    opacity: 0.40;
+    cursor: not-allowed !important;
+    background: #fff !important;
+    color: #c4c8ce !important;
+    border: 1px solid #e0e4e9 !important;
+    box-shadow: none !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:before,
+.dataTables_wrapper .dataTables_paginate .paginate_button:after {
+    display: none !important;
+    content: none !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* Remove Bootstrap's box-shadow on active/focused buttons */
+.dataTables_wrapper .dataTables_paginate .pagination .page-item.active .page-link,
+.dataTables_wrapper .dataTables_paginate .pagination .page-link:focus {
+    box-shadow: none !important;
+}
+
+/* Remove Bootstrap's page-link border/background for all pagination */
+.dataTables_wrapper .dataTables_paginate .pagination .page-link {
+    border: none !important;
+    background: none !important;
+}
