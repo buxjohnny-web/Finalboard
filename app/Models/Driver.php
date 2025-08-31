@@ -24,6 +24,10 @@ class Driver extends Model
         'active',
     ];
 
+    protected $casts = [
+        'active' => 'boolean',
+    ];
+
     /**
      * Get the user who added the driver.
      */
@@ -31,11 +35,12 @@ class Driver extends Model
     {
         return $this->belongsTo(User::class, 'added_by');
     }
+
     /**
- * Get the calculations for the driver.
- */
-public function calculations()
-{
-    return $this->hasMany(Calculation::class);
-}
+     * Get the calculations for the driver.
+     */
+    public function calculations()
+    {
+        return $this->hasMany(Calculation::class);
+    }
 }

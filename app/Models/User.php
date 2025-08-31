@@ -34,4 +34,9 @@ class User extends Authenticatable
         'reset_token_expiry' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function driversAdded()
+    {
+        return $this->hasMany(\App\Models\Driver::class, 'added_by');
+    }
 }

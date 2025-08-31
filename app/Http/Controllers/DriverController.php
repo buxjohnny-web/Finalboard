@@ -18,10 +18,10 @@ class DriverController extends Controller
     {
         $request->validate([
             'full_name'      => ['required', 'string', 'max:255'],
-            'phone_number'   => ['required', 'string', 'max:20'],
+            'phone_number'   => ['nullable', 'string', 'max:20'],
             'driver_id'      => ['required', 'string', 'max:50', 'unique:drivers,driver_id'],
-            'license_number' => ['required', 'string', 'max:50'],
-            'ssn'            => ['required', 'string', 'max:50'],
+            'license_number' => ['nullable', 'string', 'max:50'],
+            'ssn'            => ['nullable', 'string', 'max:50'],
         ]);
 
         Driver::create([
@@ -70,15 +70,15 @@ class DriverController extends Controller
 
         $request->validate([
             'full_name'      => ['required', 'string', 'max:255'],
-            'phone_number'   => ['required', 'string', 'max:20'],
+            'phone_number'   => ['nullable', 'string', 'max:20'],
             'driver_id'      => [
                 'required',
                 'string',
                 'max:50',
                 Rule::unique('drivers', 'driver_id')->ignore($driver->id),
             ],
-            'license_number' => ['required', 'string', 'max:50'],
-            'ssn'            => ['required', 'string', 'max:50'],
+            'license_number' => ['nullable', 'string', 'max:50'],
+            'ssn'            => ['nullable', 'string', 'max:50'],
         ]);
 
         $driver->update($request->only([

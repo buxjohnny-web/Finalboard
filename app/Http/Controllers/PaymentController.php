@@ -8,19 +8,23 @@ use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
-public function show($driver_id, $week)
-{
-    $driver = Driver::findOrFail($driver_id);
+    public function show($driver_id, $week)
+    {
+        $driver = Driver::findOrFail($driver_id);
 
-    // normalize week like CalculationController
-    $weekNumber = is_numeric($week)
-        ? (int) $week
-        : (int) preg_replace('/\D+/', '', (string) $week);
+        // Normalize week similar to CalculationController::toWeekNumber
+        if (is_numeric($week)) {
+            $weekNumber = (int) $week;
+        } elseif (preg_match('/(\d{1,2})$/', (string) $week, $m)) {
+            $weekNumber = (int) $m[1];
+        } else {
+            $weekNumber = (int) preg_replace('/\D+/', '', (string) $week);
+        }
 
-    $calculation = Calculation::where('driver_id', $driver_id)
-        ->where('week_number', $weekNumber)
-        ->firstOrFail();
+        $calculation = Calculation::where('driver_id', $driver_id)
+            ->where('week_number', $weekNumber)
+            ->firstOrFail();
 
-    return view('paydetails', compact('driver', 'calculation', 'week'));
-}
+        return view('paydetails', compact('driver', 'calculation', 'week'));
+    }
 }
