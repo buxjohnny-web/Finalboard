@@ -12,10 +12,11 @@
     <link href="{{ asset('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/custom.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/app.min.css') }}" rel="stylesheet" type="text/css" id="app-style" />
-    
+
     <!-- Datatables css -->
     <link href="{{ asset('assets/css/dataTables.bootstrap5.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/responsive.bootstrap5.css') }}" rel="stylesheet" type="text/css" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
 </head>
 

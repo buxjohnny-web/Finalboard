@@ -68,5 +68,13 @@
     'driver_deleted_success' => 'Conducteur supprimé avec succès.',
     'search' => 'Rechercher',
         'search_placeholder' => 'Rechercher par nom, téléphone ou ID',
+        // Ajoutez ces clés au tableau retourné
+'reset_failed' => 'Échec de la réinitialisation. Veuillez réessayer.',
+'reset_calculation_title' => 'Réinitialiser le calcul',
+'confirm_reset_calculation' => 'Êtes-vous sûr de vouloir réinitialiser toutes les valeurs à 0 ?',
+'yes' => 'Oui',
+'no' => 'Non',
+'close' => 'Fermer',
+'calculation_reset_success' => 'Le calcul a été réinitialisé avec succès.',
 
     ];

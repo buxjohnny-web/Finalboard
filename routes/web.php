@@ -4,8 +4,15 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\CalculationController;
+use App\Http\Controllers\PaymentController;
 
-// Language switch route (public)
+/*
+|--------------------------------------------------------------------------
+| Public Routes
+|--------------------------------------------------------------------------
+*/
+
+// Language switch
 Route::get('/lang/{locale}', function ($locale) {
     if (in_array($locale, config('app.available_locales', ['en', 'fr']))) {
         session(['locale' => $locale]);
@@ -14,16 +21,26 @@ Route::get('/lang/{locale}', function ($locale) {
     return redirect()->back();
 })->name('lang.switch');
 
-// Public login routes
+// Authentication
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Protected routes
+/*
+|--------------------------------------------------------------------------
+| Protected Routes (Requires Auth + Localization)
+|--------------------------------------------------------------------------
+*/
 Route::middleware(['web', 'auth', \App\Http\Middleware\Localization::class])->group(function () {
+
+    // Dashboard / Home
     Route::get('/', fn () => view('index'))->name('home');
 
-    // Drivers
+    /*
+    |--------------------------------------------------------------------------
+    | Driver Management
+    |--------------------------------------------------------------------------
+    */
     Route::get('/drivers', [DriverController::class, 'index'])->name('drivers');
     Route::get('/drivers/{id}', [DriverController::class, 'show'])->name('drivers.show');
     Route::get('/newdriver', fn () => view('newdriver'))->name('newdriver');
@@ -32,12 +49,26 @@ Route::middleware(['web', 'auth', \App\Http\Middleware\Localization::class])->gr
     Route::put('/drivers/{id}', [DriverController::class, 'update'])->name('drivers.update');
     Route::delete('/drivers/{id}', [DriverController::class, 'destroy'])->name('drivers.delete');
 
-    // Calculation routes
-    // Keep both paths/names so existing links work
+    /*
+    |--------------------------------------------------------------------------
+    | Calculations
+    |--------------------------------------------------------------------------
+    */
+    // View calculations (multiple route formats for compatibility)
     Route::get('/calculate/{driver}/{week}', [CalculationController::class, 'show'])->name('calculate.week');
     Route::get('/drivers/{driver}/calculate/{week}', [CalculationController::class, 'show'])->name('calculate.show');
 
+    // Upload & save
     Route::post('/calculate/upload', [CalculationController::class, 'uploadPdf'])->name('calculate.upload');
     Route::post('/calculate/save', [CalculationController::class, 'save'])->name('calculate.save');
-    Route::get('paydetails/{driver}/{week}', [App\Http\Controllers\PaymentController::class, 'show'])->name('paydetails.show');
+
+    // Reset calculation (AJAX)
+    Route::delete('/drivers/{driver}/calculate/{week}/reset', [CalculationController::class, 'reset'])->name('calculate.reset');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Payment Details
+    |--------------------------------------------------------------------------
+    */
+    Route::get('paydetails/{driver}/{week}', [PaymentController::class, 'show'])->name('paydetails.show');
 });

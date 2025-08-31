@@ -66,5 +66,13 @@
     'driver_deleted_success' => 'Driver deleted successfully.',
     'search' => 'Search',
     'search_placeholder' => 'Search by name, phone or ID',
+    // Add these keys to the returned array
+'reset_failed' => 'Reset failed. Please try again.',
+'reset_calculation_title' => 'Reset Calculation',
+'confirm_reset_calculation' => 'Are you sure you want to reset all values to 0?',
+'yes' => 'Yes',
+'no' => 'No',
+'close' => 'Close',
+'calculation_reset_success' => 'Calculation has been reset successfully.',
 
     ];

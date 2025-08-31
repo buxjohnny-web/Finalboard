@@ -123,7 +123,7 @@ class CalculationController extends Controller
         $driverShare = (100 - $percentage) / 100;
         $left        = $totalInvoice * $driverShare;
         $right       = $vehiculeRental * $parcelRowsCount;
-        $finalAmount = round($left - $right + $bonus - $cashAdvance, 2);
+        $finalAmount = round($left - $right + $bonus - $cash_advance, 2);
 
         $old = $calculation->only(['vehicule_rental_price','broker_percentage','bonus','cash_advance','final_amount']);
 
@@ -146,6 +146,29 @@ class CalculationController extends Controller
         return response()->json([
             'final_amount' => number_format($finalAmount, 2, '.', ''),
             'success' => true,
+        ]);
+    }
+
+    public function reset(Request $request, $driverId, $week)
+    {
+        $weekNumber = $this->toWeekNumber($week);
+
+        $calculation = Calculation::where('driver_id', (int)$driverId)
+            ->where('week_number', $weekNumber)
+            ->first();
+
+        if ($calculation) {
+            // Log deletion prior to delete
+            $this->logCalculationChange($calculation, auth()->id(), $calculation->only([
+                'total_invoice','parcel_rows_count','vehicule_rental_price','broker_percentage','bonus','cash_advance','final_amount','pdf_path'
+            ]), 'delete');
+
+            $calculation->delete();
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => __('messages.calculation_reset_success'),
         ]);
     }
 
