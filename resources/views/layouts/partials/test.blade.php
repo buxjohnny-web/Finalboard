@@ -3,16 +3,15 @@
 @endphp
 
 <div class="navbar-custom topnav-navbar-dark">
-    <ul class="list-unstyled topbar-menu float-end mb-0">
+    {{-- <ul class="list-unstyled topbar-menu float-end mb-0">
         <li class="dropdown notification-list topbar-dropdown">
-            <a class="text-white nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#"
-                role="button">
+            <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button">
                 @if ($currentLocale === 'fr')
                     <img src="{{ asset('assets/images/flags/france.jpg') }}" alt="flag" height="12">
-                    <span class="text-white align-middle d-none d-sm-inline-block">Français</span>
+                    <span class="align-middle d-none d-sm-inline-block">Français</span>
                 @else
                     <img src="{{ asset('assets/images/flags/us.jpg') }}" alt="flag" height="12">
-                    <span class="text-white align-middle d-none d-sm-inline-block">English</span>
+                    <span class="align-middle d-none d-sm-inline-block">English</span>
                 @endif
                 <i class="mdi mdi-chevron-down d-none d-sm-inline-block align-middle"></i>
             </a>
@@ -30,18 +29,16 @@
                 @endforeach
             </div>
         </li>
+
         <li class="dropdown notification-list">
-            <a id="user-menu-toggle" class="nav-link dropdown-toggle nav-user arrow-none me-0" data-bs-toggle="dropdown"
-                href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                <span class="account-user-avatar d-lg-none">
-                    <span id="user-initials"
-                        class="text-white rounded-circle d-inline-flex align-items-center justify-content-center">
-                        {{ strtoupper(substr(Auth::user()->full_name, 0, 1)) }}{{ strtoupper(substr(explode(' ', Auth::user()->full_name)[1] ?? '', 0, 1)) }}
-                    </span>
+            <a class="nav-link dropdown-toggle nav-user arrow-none me-0" data-bs-toggle="dropdown" href="#"
+                role="button">
+                <span class="account-user-avatar avatar-initials">
+                    {{ strtoupper(substr(Auth::user()->full_name, 0, 1)) }}{{ strtoupper(substr(explode(' ', Auth::user()->full_name)[1] ?? '', 0, 1)) }}
                 </span>
-                <span id="user-meta" class="d-none d-lg-block">
-                    <span class="text-white account-user-name">{{ Auth::user()->full_name }}</span>
-                    <span class="text-white account-position">{{ strtoupper(Auth::user()->role) }}</span>
+                <span>
+                    <span class="account-user-name">{{ Auth::user()->full_name }}</span>
+                    <span class="account-position">{{ strtoupper(Auth::user()->role) }}</span>
                 </span>
             </a>
             <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated topbar-dropdown-menu profile-dropdown">
@@ -58,8 +55,7 @@
                 </a>
             </div>
         </li>
-    </ul>
-
+    </ul> --}}
     <button class="button-menu-mobile open-left text-white">
         <i class="mdi mdi-menu"></i>
     </button>

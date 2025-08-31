@@ -1,6 +1,7 @@
 @extends('layouts.master')
 @section('content')
-    <div class="row">
+    <br>
+    <div class="row text-center">
         <div class="col-12">
             <div class="page-title-box">
                 <h4 class="page-title">
@@ -14,8 +15,8 @@
     <div class="mb-3">
         <div class="input-group">
             <input type="text" id="table-search-input" class="form-control"
-                placeholder="{{ __('messages.search_placeholder') }}" aria-label="{{ __('messages.search') }}">
-            <button class="btn btn-primary" id="table-search-button">
+                placeholder="{{ __('messages.searchdriverpage') }}" aria-label="{{ __('messages.search') }}">
+            <button class="btn btn-info" id="table-search-button">
                 {{ __('messages.search') }}
             </button>
         </div>
@@ -48,7 +49,7 @@
                                     {{ __('messages.finalamount') }}
                                 </th>
                                 <th style="width: 80px;" class="text-center">
-                                    {{ __('messages.calculate') }}
+                                    {{ __('messages.calculatexx') }}
                                 </th>
                             </tr>
                         </thead>
@@ -92,6 +93,7 @@
 
                                     $rowId = 'row-week-' . $week;
                                     $calcUrl = route('calculate.show', ['driver' => $driver->id, 'week' => $week]);
+                                    $editUrl = route('calculate.edit', ['driver' => $driver->id, 'week' => $week]);
                                     $resetUrl = route('calculate.reset', ['driver' => $driver->id, 'week' => $week]);
                                 @endphp
                                 <tr id="{{ $rowId }}" class="clickable-row"
@@ -118,9 +120,9 @@
                                     </td>
                                     <td class="text-center align-middle">
                                         @if ($totalInvoice > 0)
-                                            <div class="d-flex align-items-center justify-content-center gap-2">
+                                            <div class="d-flex align-items-center justify-content-center gap-1">
                                                 <!-- Edit calculation (Drivers actions style) -->
-                                                <a href="{{ $calcUrl }}" class="action-icon"
+                                                <a href="{{ $editUrl }}" class="action-icon"
                                                     aria-label="{{ __('messages.edit') }}"
                                                     title="{{ __('messages.edit') }}">
                                                     <i class="mdi mdi-pencil"></i>
@@ -280,8 +282,6 @@
                                 throw new Error('reset_failed');
                             }
 
-                            // Update the row to reflect reset state (keep your existing code below)
-
                             // Update row values in the table UI
                             const row = document.querySelector(pendingReset.rowSelector);
                             if (row) {
@@ -342,9 +342,9 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 1.8rem;
-            height: 1.8rem;
-            font-size: 1.1rem;
+            width: 1.6rem;
+            height: 1.6rem;
+            font-size: 1rem;
             color: inherit;
             text-decoration: none;
             cursor: pointer;

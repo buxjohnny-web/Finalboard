@@ -72,3 +72,42 @@
     border: none !important;
     background: none !important;
 }
+/* Make the right slot center perfectly (override theme paddings) */
+#user-menu-toggle {
+  width: 56px !important;        /* match avatar slot */
+  height: 60px !important;       /* set to your navbar height */
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;   /* vertical center */
+  justify-content: center !important; /* horizontal center */
+  line-height: normal !important;
+  position: relative;
+  text-align: center !important;
+}
+
+/* On larger screens (desktops), expand the user menu to show name/role */
+@media (min-width: 992px) {
+  #user-menu-toggle {
+    width: auto !important;
+    justify-content: flex-start !important;
+    padding: 0 1rem !important; /* Restore horizontal padding */
+  }
+}
+
+/* Override absolute positioning for the avatar to allow flex centering */
+#user-menu-toggle .account-user-avatar {
+    position: static;
+}
+
+/* Initials circle same box as image avatars */
+#user-initials {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-weight: 600;
+  /* line-height is not needed with flex centering and can cause issues.
+     The d-inline-flex classes on the element will handle centering. */
+}
+
+/* The visibility of #user-meta is now handled by Bootstrap's responsive
+   display classes (d-none d-lg-block) in the Blade template. */

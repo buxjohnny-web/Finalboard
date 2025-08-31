@@ -33,6 +33,101 @@ class CalculationController extends Controller
         ]);
     }
 
+    public function edit($driverId, $week)
+    {
+        $driver = Driver::findOrFail((int)$driverId);
+        $weekNumber = $this->toWeekNumber($week);
+
+        // Ensure a row exists (defaults for non-nullable fields)
+        $calculation = Calculation::firstOrCreate(
+            [
+                'driver_id'   => $driver->id,
+                'week_number' => $weekNumber,
+            ],
+            [
+                'broker_percentage' => 0,
+            ]
+        );
+
+        return view('calculate_edit', [
+            'driver'      => $driver,
+            'week'        => $week, // keep original format for display
+            'calculation' => $calculation,
+        ]);
+    }
+
+    public function update(Request $request, $driverId, $week)
+    {
+        $driver = Driver::findOrFail((int)$driverId);
+        $weekNumber = $this->toWeekNumber($week);
+
+        $validated = $request->validate([
+            'total_invoice'         => ['nullable','numeric','regex:/^\d+(\.\d{1,2})?$/'],
+            'parcel_rows_count'     => ['nullable','integer','min:0'],
+            'vehicule_rental_price' => ['nullable','numeric','regex:/^\d+(\.\d{1,2})?$/'],
+            'broker_percentage'     => ['required','numeric','between:0,100'],
+            'cash_advance'          => ['nullable','numeric','regex:/^\d+(\.\d{1,2})?$/'],
+        ]);
+
+        $calculation = Calculation::firstOrCreate(
+            [
+                'driver_id'   => $driver->id,
+                'week_number' => $weekNumber,
+            ],
+            [
+                'broker_percentage' => 0,
+            ]
+        );
+
+        // Inputs (fallback to 0 if null)
+        $totalInvoice    = (float) ($validated['total_invoice'] ?? 0);
+        $parcelRowsCount = (int)   ($validated['parcel_rows_count'] ?? 0);
+        $vehiculeRental  = (float) ($validated['vehicule_rental_price'] ?? 0);
+        $percentage      = (float) $validated['broker_percentage'];
+        $cashAdvance     = (float) ($validated['cash_advance'] ?? 0);
+
+        // Use existing bonus if any (field not edited here)
+        $bonus = (float) ($calculation->bonus ?? 0);
+
+        // Compute final amount
+        $driverShare = (100 - $percentage) / 100;
+        $left        = $totalInvoice * $driverShare;
+        $right       = $vehiculeRental * $parcelRowsCount;
+        $finalAmount = round($left - $right + $bonus - $cashAdvance, 2);
+
+        $old = $calculation->only([
+            'total_invoice','parcel_rows_count','vehicule_rental_price',
+            'broker_percentage','cash_advance','final_amount'
+        ]);
+
+        $calculation->update([
+            'total_invoice'         => $totalInvoice,
+            'parcel_rows_count'     => $parcelRowsCount,
+            'vehicule_rental_price' => $vehiculeRental,
+            'broker_percentage'     => $percentage,
+            'cash_advance'          => $cashAdvance,
+            'final_amount'          => $finalAmount,
+        ]);
+
+        if ($old != $calculation->only(array_keys($old))) {
+            $this->logCalculationChange($calculation, auth()->id(), $calculation->only([
+                'total_invoice','parcel_rows_count','vehicule_rental_price','broker_percentage','bonus','cash_advance','final_amount','pdf_path'
+            ]), 'update');
+        }
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success'      => true,
+                'final_amount' => number_format($finalAmount, 2, '.', ''),
+                'message'      => __('messages.calculation_update_success'),
+            ]);
+        }
+
+return redirect()
+    ->route('drivers.show', ['id' => $driver->id])
+    ->with('status', __('messages.calculation_update_success'));
+    }
+
     public function uploadPdf(Request $request)
     {
         $request->validate([
@@ -123,7 +218,7 @@ class CalculationController extends Controller
         $driverShare = (100 - $percentage) / 100;
         $left        = $totalInvoice * $driverShare;
         $right       = $vehiculeRental * $parcelRowsCount;
-        $finalAmount = round($left - $right + $bonus - $cash_advance, 2);
+        $finalAmount = round($left - $right + $bonus - $cashAdvance, 2);
 
         $old = $calculation->only(['vehicule_rental_price','broker_percentage','bonus','cash_advance','final_amount']);
 

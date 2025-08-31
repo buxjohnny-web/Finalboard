@@ -24,7 +24,7 @@ Route::get('/lang/{locale}', function ($locale) {
 // Authentication
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
 /*
 |--------------------------------------------------------------------------
@@ -65,10 +65,19 @@ Route::middleware(['web', 'auth', \App\Http\Middleware\Localization::class])->gr
     // Reset calculation (AJAX)
     Route::delete('/drivers/{driver}/calculate/{week}/reset', [CalculationController::class, 'reset'])->name('calculate.reset');
 
+    // Edit & update calculation
+    Route::get('/drivers/{driver}/calculate/{week}/edit', [CalculationController::class, 'edit'])->name('calculate.edit');
+    Route::put('/drivers/{driver}/calculate/{week}', [CalculationController::class, 'update'])->name('calculate.update');
+
     /*
     |--------------------------------------------------------------------------
     | Payment Details
     |--------------------------------------------------------------------------
     */
     Route::get('paydetails/{driver}/{week}', [PaymentController::class, 'show'])->name('paydetails.show');
+
+    // Home layout test pages
+Route::get('/home/a', fn () => view('home_option_a'))->name('home.a');
+Route::get('/home/b', fn () => view('home_option_b'))->name('home.b');
+Route::get('/home/c', fn () => view('home_option_c'))->name('home.c');
 });
