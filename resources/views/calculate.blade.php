@@ -27,8 +27,8 @@
 
             <div class="dz-message needsclick">
                 <i class="h1 text-muted dripicons-cloud-upload"></i>
-                <h3>Drop PDF file here or click to upload.</h3>
-                <span class="text-muted font-13">(Only PDF files are accepted. Max size: 5MB)</span>
+                <h3>{{ __('messages.drop_file_here') }}</h3>
+                <span class="text-muted font-13">{{ __('messages.pdf_file_requirements') }}</span>
             </div>
         </form>
         <div class="dropzone-previews mt-3" id="file-previews"></div>
@@ -61,23 +61,23 @@
         <!-- Calculation Form -->
         <form id="calculation-form" class="mt-4" style="display:none;">
             <div class="mb-3">
-                <label for="vehicule-rental-price" class="form-label">Vehicule rental price</label>
+                <label for="vehicule-rental-price" class="form-label">{{ __('messages.vehicle_rental_price') }}</label>
                 <input type="number" step="0.01" min="0" class="form-control" id="vehicule-rental-price">
             </div>
             <div class="mb-3">
-                <label for="percentage" class="form-label">Percentage (%)</label>
-                <input type="number" step="0.01" min="0" max="100" class="form-control" id="percentage" required placeholder="Enter broker percentage (e.g. 20)">
+                <label for="percentage" class="form-label">{{ __('messages.percentage') }}</label>
+                <input type="number" step="0.01" min="0" max="100" class="form-control" id="percentage" required placeholder="{{ __('messages.enter_broker_percentage') }}">
             </div>
             <div class="mb-3">
-                <label for="bonus" class="form-label">Add bonus</label>
+                <label for="bonus" class="form-label">{{ __('messages.add_bonus') }}</label>
                 <input type="number" step="0.01" min="0" class="form-control" id="bonus" value="0">
             </div>
             <div class="mb-3">
-                <label for="cash-advance" class="form-label">Deduct cash advance</label>
+                <label for="cash-advance" class="form-label">{{ __('messages.deduct_cash_advance') }}</label>
                 <input type="number" step="0.01" min="0" class="form-control" id="cash-advance" value="0">
             </div>
             <button type="button" class="btn btn-info" id="start-btn">
-                <i class="mdi mdi-transfer-right"></i> <span>Start</span>
+                <i class="mdi mdi-transfer-right"></i> <span>{{ __('messages.start') }}</span>
             </button>
         </form>
 
@@ -86,11 +86,11 @@
             <div class="alert alert-primary alert-dismissible bg-primary text-white border-0 fade show mt-4" role="alert">
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
                 <strong>
-                    Final amount : <span id="final-amount"></span>. Do you want to save?
+                    {{ __('messages.final_amount_save_prompt') }} <span id="final-amount"></span>, {{ __('messages.wannasavit') }}
                 </strong>
             </div>
             <button type="button" class="btn btn-info" id="save-btn">
-                <i class="mdi mdi-content-save"></i> <span>Save</span>
+                <i class="mdi mdi-content-save"></i> <span>{{ __('messages.save') }}</span>
             </button>
         </div>
     </div>
@@ -128,13 +128,13 @@
             if (totalInvoice > 0 && parcelRowsCount > 0) {
                 document.getElementById('calculation-form').style.display = '';
             } else {
-                alert('Could not extract required data from the PDF. Please check the file.');
+                alert('{{ __("messages.pdf_extraction_failed") }}');
                 document.getElementById('myAwesomeDropzone').style.display = '';
             }
         },
         error: function () {
             document.getElementById('spinner').style.display = 'none';
-            alert('File upload failed.');
+            alert('{{ __("messages.file_upload_failed") }}');
             document.getElementById('myAwesomeDropzone').style.display = '';
         }
     };
@@ -169,7 +169,7 @@
                     finalAmount = left - right + bonus - cashAdvance;
 
                     document.getElementById('spinner').style.display = 'none';
-                    document.getElementById('final-amount').innerText = finalAmount.toFixed(2);
+                    document.getElementById('final-amount').innerText = '$' + finalAmount.toFixed(2);
                     resultAlert.style.display = '';
                     startBtn.style.display = 'none';
                 }, 500);
@@ -179,6 +179,8 @@
         if (saveBtn) {
             saveBtn.addEventListener('click', async function(e) {
                 e.preventDefault();
+                document.getElementById('spinner').style.display = '';
+                
                 try {
                     const res = await fetch('{{ route('calculate.save') }}', {
                         method: 'POST',
@@ -199,13 +201,15 @@
 
                     if (!res.ok) {
                         const err = await res.json().catch(() => ({}));
-                        throw new Error(err.message || 'Save failed');
+                        throw new Error(err.message || '{{ __("messages.save_failed") }}');
                     }
 
-                    const json = await res.json();
-                    alert('Saved. Final amount: ' + json.final_amount);
+                    // Redirect to driver page instead of showing alert
+                    window.location.href = "{{ route('drivers.show', $driver->id) }}";
+                    
                 } catch (err) {
-                    alert(err.message || 'Error saving calculation.');
+                    document.getElementById('spinner').style.display = 'none';
+                    alert(err.message || '{{ __("messages.error_saving_calculation") }}');
                 }
             });
         }

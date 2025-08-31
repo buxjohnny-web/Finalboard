@@ -145,6 +145,7 @@ class CalculationController extends Controller
 
         return response()->json([
             'final_amount' => number_format($finalAmount, 2, '.', ''),
+            'success' => true,
         ]);
     }
 

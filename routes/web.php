@@ -39,4 +39,5 @@ Route::middleware(['web', 'auth', \App\Http\Middleware\Localization::class])->gr
 
     Route::post('/calculate/upload', [CalculationController::class, 'uploadPdf'])->name('calculate.upload');
     Route::post('/calculate/save', [CalculationController::class, 'save'])->name('calculate.save');
+    Route::get('paydetails/{driver}/{week}', [App\Http\Controllers\PaymentController::class, 'show'])->name('paydetails.show');
 });
