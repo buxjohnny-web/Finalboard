@@ -60,5 +60,11 @@
 'status' => 'Status',
 'added_by' => 'Added By',
 'created_on' => 'Created On',
+    'invalid_credentials' => 'Invalid email or password.',
+    'driver_added_success' => 'Driver added successfully!',
+    'driver_updated_success' => 'Driver updated successfully!',
+    'driver_deleted_success' => 'Driver deleted successfully.',
+    'search' => 'Search',
+    'search_placeholder' => 'Search by name, phone or ID',
 
     ];

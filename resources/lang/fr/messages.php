@@ -62,5 +62,11 @@
 'status' => 'Statut',
 'added_by' => 'Ajouté par',
 'created_on' => 'Créé le',
+    'invalid_credentials' => 'Adresse e-mail ou mot de passe invalide.',
+    'driver_added_success' => 'Conducteur ajouté avec succès !',
+    'driver_updated_success' => 'Conducteur mis à jour avec succès !',
+    'driver_deleted_success' => 'Conducteur supprimé avec succès.',
+    'search' => 'Rechercher',
+        'search_placeholder' => 'Rechercher par nom, téléphone ou ID',
 
     ];
