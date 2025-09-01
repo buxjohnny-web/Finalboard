@@ -111,3 +111,46 @@
 
 /* The visibility of #user-meta is now handled by Bootstrap's responsive
    display classes (d-none d-lg-block) in the Blade template. */
+           #drivers-datatable {
+            width: 100% !important;
+        }
+        #products-table {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+.card-body {
+  width: auto !important;
+  min-width: 0 !important;
+}
+
+/* Make expand column very narrow */
+#products-table #col-expand,
+#products-table .col-expand {
+    width: 25px;
+    text-align: center;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/* Make status column narrow */
+#products-table #col-status,
+#products-table .col-status {
+    width: 35px;
+    text-align: center;
+    padding-left: 0;
+    padding-right: 0;
+}
+#products-table td.dtr-control::before,
+#products-table th.dtr-control::before {
+    /* content: "▶";               arrow instead of + */
+    background-color: #3aafd1 !important; /* custom color */
+    
+    color: #ffffff !important;  /* custom color */
+    font-weight: bold;
+}
+
+        .dt-paging {
+            display: flex;
+            justify-content: center;
+        }

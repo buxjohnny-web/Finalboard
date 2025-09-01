@@ -49,6 +49,21 @@ return [
     'week' => 'Semaine',
     'weekno' => '#Semaine',
 
+    // Login
+        'drivers'               => 'Chauffeurs',
+    'add_driver_btn'        => 'Ajouter un chauffeur',
+    'status'                => 'Statut',
+    'search_placeholder'    => 'Rechercher des chauffeurs...',
+    // Add these new keys for the login page
+    'login_title'           => 'Connexion',
+    'login_email_label'     => 'Adresse e-mail',
+    'login_email_placeholder' => 'Entrez votre e-mail',
+    'login_forgot_password' => 'Mot de passe oublié?',
+    'login_password_label'  => 'Mot de passe',
+    'login_password_placeholder' => 'Entrez votre mot de passe',
+    'login_remember_me'     => 'Se souvenir de moi',
+    'login_button'          => 'Connexion',
+
     // Calcul (table/liste)
     'intelcom_invoice' => 'Facture Intelcom',
     'total_invoice' => 'Facture Totale',

@@ -95,7 +95,19 @@ return [
     'error_saving_calculation' => 'Error saving calculation.',
     'enter_broker_percentage' => 'Enter broker percentage (e.g. 20)',
 
-
+    // login page
+    'drivers'               => 'Drivers',
+    'add_driver_btn'        => 'Add Driver',
+    'status'                => 'Status',
+    'search_placeholder'    => 'Search for drivers...',
+    'login_title'           => 'Log In',
+    'login_email_label'     => 'Email address',
+    'login_email_placeholder' => 'Enter your email',
+    'login_forgot_password' => 'Forgot your password?',
+    'login_password_label'  => 'Password',
+    'login_password_placeholder' => 'Enter your password',
+    'login_remember_me'     => 'Remember me',
+    'login_button'          => 'Log In',
 
     // Add inside the returned array
 'home_option_a_title' => 'Home – Option A',

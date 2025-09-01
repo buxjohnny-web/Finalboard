@@ -1,18 +1,7 @@
 @extends('layouts.master')
 
 @push('styles')
-    <style>
-        /* Mobile-specific row click affordance */
-        @media (max-width: 767.98px) {
-            .clickable-mobile-row {
-                cursor: pointer;
-            }
-
-            .clickable-mobile-row:hover {
-                background-color: #f8f9fa;
-            }
-        }
-    </style>
+    <link href="https://cdn.datatables.net/v/bs5/dt-2.0.8/r-3.0.2/datatables.min.css" rel="stylesheet">
 @endpush
 
 @section('content')
@@ -23,12 +12,11 @@
         </button>
     </div>
 
-    <!-- Search form -->
     <div class="mb-3">
         <div class="input-group">
             <input type="text" id="table-search-input" class="form-control"
                 placeholder="{{ __('messages.search_placeholder') }}" aria-label="{{ __('messages.search') }}">
-            <button class="btn btn-primary" id="table-search-button">
+            <button class="btn btn-info" id="table-search-button">
                 {{ __('messages.search') }}
             </button>
         </div>
@@ -36,120 +24,122 @@
 
     <div class="card">
         <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-centered table-striped w-100" id="products-table">
-                    <thead>
-                        <tr>
-                            <!-- Mobile: only a grey circle icon; Desktop: translated label -->
-                            <th class="text-center" style="width: 40px;">
-                                <span class="d-inline d-md-none" aria-hidden="true">
-                                    <i class="mdi mdi-circle text-secondary"></i>
-                                </span>
-                                <span class="d-none d-md-inline">{{ __('messages.status') }}</span>
-                                <span class="visually-hidden">{{ __('messages.status') }}</span>
-                            </th>
-                            <th style="width: 60px;">{{ __('messages.id') }}</th>
-                            <th>{{ __('messages.name') }}</th>
+            <table class="table table-centered table-striped dt-responsive nowrap w-100" id="products-table">
+                <thead>
+                    <tr>
+                        <th id="col-expand"></th>
+                        <th id="col-status" class="text-center">
+                            <span class="d-inline d-md-none" aria-hidden="true">
+                                <i class="mdi mdi-circle text-secondary"></i>
+                            </span>
+                            <span class="d-none d-md-inline">{{ __('messages.status') }}</span>
+                            <span class="visually-hidden">{{ __('messages.status') }}</span>
+                        </th>
+                        <th>{{ __('messages.driver') }}</th>
+                        <th>{{ __('messages.phone') }}</th>
+                        <th>{{ __('messages.added_by') }}</th>
+                        <th>{{ __('messages.created_on') }}</th>
+                        <th class="text-center" style="width: 120px;">{{ __('messages.actions') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($drivers as $driver)
+                        @php
+                            $firstName = $driver->first_name ?? explode(' ', $driver->full_name)[0];
+                            $addedByUser = \App\Models\User::find($driver->added_by);
+                        @endphp
+                        <tr data-href="{{ route('drivers.show', $driver->id) }}">
+                            <td class="col-expand"></td>
+                            <td class="text-center col-status">
+                                @if ($driver->active == 1)
+                                    <i class="mdi mdi-circle text-success" aria-label="{{ __('messages.status') }}"></i>
+                                @else
+                                    <i class="mdi mdi-circle text-danger" aria-label="{{ __('messages.status') }}"></i>
+                                @endif
+                            </td>
+                            <td>
+                                {{ $driver->driver_id }} - {{ $firstName }}
+                            </td>
+                            <td>{{ $driver->phone_number }}</td>
+                            <td>{{ $addedByUser ? $addedByUser->full_name : '' }}</td>
+                            <td>{{ \Carbon\Carbon::parse($driver->created_at)->format('d-m-y') }}</td>
+                            <td class="text-center">
+                                <a href="{{ route('drivers.show', $driver->id) }}" class="action-icon"
+                                    aria-label="{{ __('messages.view') }}" title="{{ __('messages.view') }}">
+                                    <i class="mdi mdi-eye"></i>
+                                </a>
+                                <a href="{{ route('drivers.edit', $driver->id) }}" class="action-icon"
+                                    aria-label="{{ __('messages.edit') }}" title="{{ __('messages.edit') }}">
+                                    <i class="mdi mdi-pencil"></i>
+                                </a>
+                                <form action="{{ route('drivers.delete', $driver->id) }}" method="POST"
+                                    class="d-inline m-0 p-0">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="action-icon text-danger border-0 bg-transparent p-0"
+                                        onclick="return confirm('{{ __('messages.confirm_delete_driver') }}')"
+                                        aria-label="{{ __('messages.delete') }}" title="{{ __('messages.delete') }}">
+                                        <i class="mdi mdi-trash-can"></i>
+                                    </button>
+                                </form>
 
-                            <!-- Hidden on mobile -->
-                            <th class="d-none d-md-table-cell">{{ __('messages.phone') }}</th>
-                            <th class="d-none d-md-table-cell">{{ __('messages.added_by') }}</th>
-                            <th class="d-none d-md-table-cell">{{ __('messages.created_on') }}</th>
-
-                            <th class="text-center" style="width: 120px;">{{ __('messages.actions') }}</th>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($drivers as $driver)
-                            @php
-                                $fullName = trim((string) $driver->full_name);
-                                $parts = preg_split('/\s+/', $fullName);
-                                $first = $parts[0] ?? '';
-                                $lastInitial = isset($parts[1]) ? mb_substr($parts[1], 0, 1) . '.' : '';
-                                $mobileName = trim($first . ' ' . $lastInitial); // Mobile: First L.
-                            @endphp
-                            <tr class="clickable-mobile-row" data-href="{{ route('drivers.show', $driver->id) }}">
-                                <td class="text-center">
-                                    @if ($driver->active == 1)
-                                        <i class="mdi mdi-circle text-success"
-                                            aria-label="{{ __('messages.status') }}"></i>
-                                    @else
-                                        <i class="mdi mdi-circle text-danger" aria-label="{{ __('messages.status') }}"></i>
-                                    @endif
-                                </td>
-                                <td>{{ $driver->driver_id }}</td>
-                                <td>
-                                    <span class="d-inline d-md-none">{{ $mobileName }}</span>
-                                    <span class="d-none d-md-inline">{{ $driver->full_name }}</span>
-                                </td>
-
-                                <!-- Hidden on mobile -->
-                                <td class="d-none d-md-table-cell">{{ $driver->phone_number }}</td>
-                                <td class="d-none d-md-table-cell">{{ $driver->addedBy->name ?? '' }}</td>
-                                <td class="d-none d-md-table-cell">
-                                    {{ \Carbon\Carbon::parse($driver->created_at)->format('d-m-y') }}</td>
-
-                                <td class="text-center">
-                                    <!-- Hide the "view" icon on mobile; whole row is clickable there -->
-                                    <a href="{{ route('drivers.show', $driver->id) }}"
-                                        class="action-icon d-none d-md-inline" aria-label="{{ __('messages.view') }}"
-                                        title="{{ __('messages.view') }}">
-                                        <i class="mdi mdi-eye"></i>
-                                    </a>
-                                    <a href="{{ route('drivers.edit', $driver->id) }}" class="action-icon"
-                                        aria-label="{{ __('messages.edit') }}" title="{{ __('messages.edit') }}">
-                                        <i class="mdi mdi-pencil"></i>
-                                    </a>
-                                    <form action="{{ route('drivers.delete', $driver->id) }}" method="POST"
-                                        class="d-inline m-0 p-0">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="action-icon text-danger border-0 bg-transparent p-0"
-                                            onclick="return confirm('{{ __('messages.confirm_delete_driver') }}')"
-                                            aria-label="{{ __('messages.delete') }}" title="{{ __('messages.delete') }}">
-                                            <i class="mdi mdi-trash-can"></i>
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
 @endsection
 
 @push('scripts')
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/v/bs5/dt-2.0.8/r-3.0.2/datatables.min.js"></script>
     <script>
-        function filterTable() {
-            const term = document.getElementById('table-search-input').value.toLowerCase();
-            document.querySelectorAll('#products-table tbody tr').forEach(row => {
-                row.style.display = row.textContent.toLowerCase().includes(term) ? '' : 'none';
+        $(document).ready(function() {
+            var dt = $('#products-table').DataTable({
+                responsive: true,
+                autoWidth: false,
+                // UPDATED: This dom gives pagination a full-width row to be centered in.
+                dom: "<'row'<'col-sm-12'tr>>" + // The table
+                    "<'row'<'col-sm-12'p>>", // The pagination in a full-width column
+                lengthChange: false,
+                order: [
+                    [2, 'asc']
+                ], // Order by ID-Name column
+                language: {
+                    url: "{{ asset('vendor/datatables/i18n/' . app()->getLocale() . '.json') }}",
+                    paginate: {
+                        previous: "&lt;",
+                        next: "&gt;"
+                    }
+                },
+                columnDefs: [{
+                        orderable: false,
+                        searchable: false,
+                        className: 'dtr-control',
+                        targets: 0
+                    },
+                    {
+                        responsivePriority: 1,
+                        targets: 1
+                    }, // Status
+                    {
+                        responsivePriority: 2,
+                        targets: 2
+                    }, // ID-Name
+                    {
+                        responsivePriority: 3,
+                        targets: -1
+                    } // Actions
+                ]
             });
-        }
 
-        document.getElementById('table-search-input').addEventListener('input', filterTable);
-        document.getElementById('table-search-button').addEventListener('click', filterTable);
-
-        // Make entire row clickable on mobile ONLY, excluding action controls
-        function isMobile() {
-            return window.matchMedia('(max-width: 767.98px)').matches;
-        }
-
-        document.querySelectorAll('.clickable-mobile-row').forEach(row => {
-            row.addEventListener('click', function(e) {
-                if (!isMobile()) return;
-
-                if (e.target.closest('.action-icon') || e.target.closest('button') || e.target.closest(
-                    'a')) {
-                    return;
-                }
-
-                const href = this.dataset.href;
-                if (href) {
-                    window.location.assign(href);
-                }
+            $('#table-search-input').on('input', function() {
+                dt.search(this.value).draw();
+            });
+            $('#table-search-button').on('click', function() {
+                dt.search($('#table-search-input').val()).draw();
             });
         });
     </script>
