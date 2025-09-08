@@ -7,11 +7,18 @@
             <li class="side-nav-title side-nav-item">APPS</li>
             <li class="side-nav-item">
                 <a href="{{ route('drivers') }}" class="side-nav-link">
-                    <i class="uil-car"></i>
+                    <i class="mdi mdi-car"></i>
                     <span> {{ __('Drivers') }} </span>
+                </a>
+            </li>
+            <li class="side-nav-item">
+                <a href="{{ route('payments.index') }}" class="side-nav-link">
+                    <i class="mdi mdi-receipt"></i>
+                    <span> {{ __('Payments') }} </span>
                 </a>
             </li>
         </ul>
         <div class="clearfix"></div>
     </div>
+
 </div>

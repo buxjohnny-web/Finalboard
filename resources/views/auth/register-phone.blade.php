@@ -3,9 +3,9 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>{{ __('messages.login_title') }} | Intelboard</title>
+    <title>{{ __('messages.register_phone_title') }} | Intelboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="Admin login page" name="description" />
+    <meta content="Finish registration" name="description" />
     <meta content="Intelboard" name="author" />
     <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}">
 
@@ -24,26 +24,15 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-xxl-4 col-lg-5">
-
                     <div class="card">
-
-                        {{-- <div class="card-header pt-2 pb-2 text-center bg-primary">
-                            <a href="{{ url('/') }}">
-                                <h3 class="text-white">Intelboard</h3>
-                            </a>
-                        </div> --}}
                         <div class="card-header pt-4 pb-4 text-center bg-primary">
-                            <a href="index.html">
+                            <a href="{{ url('/') }}">
                                 <svg width="228" height="36" viewBox="0 0 228 36" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
-                                    <!-- Left logo: overlapping circles -->
                                     <g>
-                                        <!-- Left blue circle -->
                                         <circle cx="18" cy="18" r="15" fill="#6AC0D7" />
-                                        <!-- Right white circle, overlapping the blue one -->
                                         <circle cx="27" cy="18" r="15" fill="white" />
                                     </g>
-                                    <!-- INTELBOARD text -->
                                     <text x="48" y="27" fill="white" font-family="Arial, Helvetica, sans-serif"
                                         font-size="24" font-weight="bold" letter-spacing="0.04em">INTELBOARD</text>
                                 </svg>
@@ -62,7 +51,6 @@
                                             class="align-middle">{{ $currentLocale === 'fr' ? 'Français' : 'English' }}</span>
                                         <i class="mdi mdi-chevron-down align-middle"></i>
                                     </a>
-                                    <!-- 🔹 align dropdown menu to the right -->
                                     <div
                                         class="dropdown-menu dropdown-menu-end dropdown-menu-animated topbar-dropdown-menu">
                                         @foreach (config('app.available_locales') as $locale)
@@ -78,54 +66,37 @@
                                 </div>
                             </div>
 
+                            <div class="text-center">
+                                <h4 class="mt-0">
+                                    {{ __('messages.register_phone_welcome', ['name' => session('google_user.name', 'Guest')]) }}
+                                </h4>
+                                <p class="text-muted mb-4">{{ __('messages.register_phone_prompt') }}</p>
+                            </div>
+
                             @if ($errors->any())
                                 <div class="alert alert-danger">
                                     <strong>{{ $errors->first() }}</strong>
                                 </div>
                             @endif
 
-                            <form action="{{ route('login') }}" method="POST">
+                            <form action="{{ route('register.phone.store') }}" method="POST">
                                 @csrf
-
                                 <div class="mb-3">
-                                    <label for="emailaddress"
-                                        class="form-label">{{ __('messages.login_email_label') }}</label>
-                                    <input class="form-control" type="email" id="emailaddress" name="email" required
-                                        placeholder="{{ __('messages.login_email_placeholder') }}"
-                                        value="{{ old('email') }}">
-                                </div>
-
-                                <div class="mb-3">
-                                    <a href="#"
-                                        class="text-muted float-end"><small>{{ __('messages.login_forgot_password') }}</small></a>
-                                    <label for="password"
-                                        class="form-label">{{ __('messages.login_password_label') }}</label>
-                                    <div class="input-group input-group-merge">
-                                        <input type="password" id="password" name="password" class="form-control"
-                                            required placeholder="{{ __('messages.login_password_placeholder') }}">
-                                        <div class="input-group-text" data-password="false">
-                                            <span class="password-eye"></span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="mb-3">
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="checkbox-signin"
-                                            name="remember" checked>
-                                        <label class="form-check-label"
-                                            for="checkbox-signin">{{ __('messages.login_remember_me') }}</label>
+                                    <label for="phone_number" class="form-label">
+                                        {{ __('messages.register_phone_label') }}
+                                    </label>
+                                    <input class="form-control" type="tel" id="phone_number" name="phone_number"
+                                        required value="{{ old('phone_number') }}"
+                                        placeholder="{{ __('messages.register_phone_placeholder') }}" maxlength="10"
+                                        inputmode="numeric">
+                                    <div class="invalid-feedback">
+                                        {{ __('messages.register_phone_error') ?? 'Please enter a valid 10-digit phone number.' }}
                                     </div>
                                 </div>
 
                                 <div class="mb-3 text-center">
                                     <button class="btn btn-primary"
-                                        type="submit">{{ __('messages.login_button') }}</button>
-                                </div>
-                                <div class="mb-3 text-center">
-                                    {{-- <a href="{{ route('register') }}" --}}
-                                    <a href="{{ route('register') }}"
-                                        class="text-dark-50 text-center pb-0 fw-bold text-muted">{{ __('messages.login_no_account') }}</a>
+                                        type="submit">{{ __('messages.register_phone_button') }}</button>
                                 </div>
                             </form>
                         </div>
@@ -135,14 +106,32 @@
         </div>
     </div>
     <footer class="footer footer-alt">
-        2024 -
-        <script>
-            document.write(new Date().getFullYear())
-        </script> © Intelboard
+        {{ date('Y') }} © Intelboard
     </footer>
 
     <script src="{{ asset('assets/js/vendor.min.js') }}"></script>
     <script src="{{ asset('assets/js/app.min.js') }}"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const phone = document.getElementById("phone_number");
+
+            phone.addEventListener("input", function() {
+                // Keep only digits
+                this.value = this.value.replace(/\D/g, "");
+
+                // Validate length (10 digits only)
+                if (/^\d{10}$/.test(this.value)) {
+                    this.classList.remove("is-invalid");
+                    this.classList.add("is-valid");
+                } else {
+                    this.classList.remove("is-valid");
+                    this.classList.add("is-invalid");
+                }
+            });
+        });
+    </script>
+
+
 </body>
 
 </html>

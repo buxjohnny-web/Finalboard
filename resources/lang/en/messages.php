@@ -18,7 +18,40 @@ return [
     'created_on' => 'Created On',
 
     // Authentication
-    'invalid_credentials' => 'Invalid email or password.',
+    'invalid_credentials' => 'The provided credentials do not match our records.',
+    'login_title'           => 'Log In',
+    'login_email_label'     => 'Email address',
+    'login_email_placeholder' => 'Enter your email',
+    'login_forgot_password' => 'Forgot your password?',
+    'login_password_label'  => 'Password',
+    'login_password_placeholder' => 'Enter your password',
+    'login_remember_me'     => 'Remember me',
+    'login_button'          => 'Log In',
+    'login_no_account'      => 'Don\'t have an account?',
+    'register_with_google' => 'Continue with Google',
+    'register_with_apple' => 'Continue with Apple',
+    'or_use_email' => 'OR USE EMAIL',
+
+    // Registration
+    'register_title' => 'Sign Up',
+    'register_full_name_label' => 'Full Name',
+    'register_full_name_placeholder' => 'Enter your full name',
+    'register_email_label' => 'Email address',
+    'register_email_placeholder' => 'Enter your email',
+    'register_phone_label' => 'Phone number',
+    'register_phone_placeholder' => 'Enter your 10-digit phone number',
+    'register_password_label' => 'Password',
+    'register_password_placeholder' => 'Enter your password',
+    'register_password_confirm_label' => 'Confirm Password',
+    'register_password_confirm_placeholder' => 'Enter your password again',
+    'register_button' => 'Sign Up',
+    'register_already_have_account' => 'Already have an account?',
+    'register_phone_error' => 'Please enter a valid 10-digit phone number.',
+    'register_phone_title' => 'Finish Registration',
+    'register_phone_welcome' => 'Welcome, :name!',
+    'register_phone_prompt' => 'Please enter your phone number to finish the registration.',
+    'register_phone_button' => 'Finish Registration',
+
 
     // Drivers
     'drivers' => 'Drivers',
@@ -43,9 +76,18 @@ return [
     'driver_deleted_success' => 'Driver deleted successfully.',
     'driver' => 'Driver',
 
+    // Payments
+    'payments_page_title' => 'Payments',
+    'batch_upload' => 'Batch invoice Upload',
+    'drop_files_here' => 'Drop PDF files here or click to upload.',
+    'click_to_upload' => 'Click to upload',
+    'batch_upload_success' => 'Batch upload successful. Files are being processed.',
+    'batch_upload_error' => 'Batch upload failed. Please try again.',
+
+
     // Weeks / Labels
-    's_week' => 'S. Week',
-    'w_week' => 'W. Week',
+    's_week' => 'Week',
+    'w_week' => 'Week',
     'week' => 'Week',
     'weekno' => 'Week #',
 
@@ -55,11 +97,13 @@ return [
     'daysworked' => 'Days Worked',
     'bonus' => 'Bonus',
     'cash_advance' => 'Cash Advance',
-    'finalamount' => 'Final Amount',     // used in table headers
-    'final_amount' => 'Final Amount',    // legacy/other places
+    'finalamount' => 'Final Amount',
+    'final_amount' => 'Final Amount',
     'benefit' => 'Benefit',
+    'calculatexx' => '#',
     'calculate' => 'Calculate',
     'payment_details' => 'Payment Details',
+    'payments' => 'Payments',
     'calculation_for' => 'Calculation for :driver - Week: :week',
 
     // Calculation edit
@@ -67,10 +111,13 @@ return [
     'reset' => 'Reset',
     'edit_calculation_title' => 'Edit Calculation',
     'broker_percentage' => 'Broker percentage',
-    // Keep both keys for compatibility with different spellings used in views/controllers
     'vehicule_rental_price' => 'Vehicle rental price',
     'vehicle_rental_price' => 'Vehicle rental price',
     'percentage' => 'Percentage (%)',
+    'add_bonus' => 'Add Bonus',
+    'deduct_cash_advance' => 'Deduct Cash Advance',
+    'vehicle_cost' => 'Vehicle Cost',
+    'additional_details' => 'Additional Details',
 
     // Calculation actions/messages
     'calculation_update_success' => 'Calculation updated successfully.',
@@ -78,14 +125,9 @@ return [
     'confirm_reset_calculation' => 'Are you sure you want to reset all values to 0?',
     'calculation_reset_success' => 'Calculation has been reset successfully.',
     'reset_failed' => 'Reset failed. Please try again.',
-
-    // File upload / parsing (legacy)
-    'drop_file_here' => 'Drop PDF file here or click to upload.',
     'pdf_file_requirements' => '(Only PDF files are accepted. Max size: 5MB)',
     'pdf_extraction_failed' => 'Could not extract required data from the PDF. Please check the file.',
     'file_upload_failed' => 'File upload failed.',
-
-    // Compute/save prompts (legacy)
     'start' => 'Start',
     'final_amount_save_prompt' => 'Final amount: ',
     'wannasavit' => 'do you want to save it?',
@@ -94,26 +136,7 @@ return [
     'saved_final_amount' => 'Saved. Final amount: ',
     'error_saving_calculation' => 'Error saving calculation.',
     'enter_broker_percentage' => 'Enter broker percentage (e.g. 20)',
-
-    // login page
-    'drivers'               => 'Drivers',
-    'add_driver_btn'        => 'Add Driver',
-    'status'                => 'Status',
-    'search_placeholder'    => 'Search for drivers...',
-    'login_title'           => 'Log In',
-    'login_email_label'     => 'Email address',
-    'login_email_placeholder' => 'Enter your email',
-    'login_forgot_password' => 'Forgot your password?',
-    'login_password_label'  => 'Password',
-    'login_password_placeholder' => 'Enter your password',
-    'login_remember_me'     => 'Remember me',
-    'login_button'          => 'Log In',
-
-    // Add inside the returned array
-'home_option_a_title' => 'Home – Option A',
-'home_option_b_title' => 'Home – Option B',
-'home_option_c_title' => 'Home – Option C',
-'pays' => 'Pays',
-'stats' => 'Stats',
-'settings' => 'Settings',
+    'pays' => 'Pays',
+    'stats' => 'Stats',
+    'settings' => 'Settings',
 ];

@@ -18,7 +18,40 @@ return [
     'created_on' => 'Créé le',
 
     // Authentification
-    'invalid_credentials' => 'Adresse e-mail ou mot de passe invalide.',
+    'invalid_credentials' => 'Les informations d\'identification fournies ne correspondent pas à nos dossiers.',
+    'login_title'           => 'Connexion',
+    'login_email_label'     => 'Adresse e-mail',
+    'login_email_placeholder' => 'Entrez votre e-mail',
+    'login_forgot_password' => 'Mot de passe oublié?',
+    'login_password_label'  => 'Mot de passe',
+    'login_password_placeholder' => 'Entrez votre mot de passe',
+    'login_remember_me'     => 'Se souvenir de moi',
+    'login_button'          => 'Connexion',
+    'login_no_account'      => 'Vous n\'avez pas de compte?',
+    'register_with_google' => 'Continuer avec Google',
+    'register_with_apple' => 'Continuer avec Apple',
+    'or_use_email' => 'OU UTILISER L\'EMAIL',
+
+    // Inscription
+    'register_title' => 'S\'inscrire',
+    'register_full_name_label' => 'Nom et prénom',
+    'register_full_name_placeholder' => 'Entrez votre nom complet',
+    'register_email_label' => 'Adresse e-mail',
+    'register_email_placeholder' => 'Entrez votre e-mail',
+    'register_phone_label' => 'Numéro de téléphone',
+    'register_phone_placeholder' => 'Entrez votre numéro à 10 chiffres',
+    'register_password_label' => 'Mot de passe',
+    'register_password_placeholder' => 'Entrez votre mot de passe',
+    'register_password_confirm_label' => 'Confirmez le mot de passe',
+    'register_password_confirm_placeholder' => 'Entrez à nouveau votre mot de passe',
+    'register_button' => 'S\'inscrire',
+    'register_already_have_account' => 'Vous avez déjà un compte?',
+    'register_phone_error' => 'Veuillez entrer un numéro de téléphone valide à 10 chiffres.',
+    'register_phone_title' => 'Finaliser l\'inscription',
+    'register_phone_welcome' => 'Bienvenue, :name !',
+    'register_phone_prompt' => 'Veuillez entrer votre numéro de téléphone pour finaliser l\'inscription.',
+    'register_phone_button' => 'Finaliser l\'inscription',
+
 
     // Chauffeurs
     'drivers' => 'Chauffeurs',
@@ -43,26 +76,20 @@ return [
     'driver_deleted_success' => 'Conducteur supprimé avec succès.',
     'driver' => 'Chauffeur',
 
+    // Paiements
+    'payments_page_title' => 'Paiements',
+    'batch_upload' => 'Téléversement de lots de fiches de paie',
+    'drop_files_here' => 'Déposez les fichiers PDF ici ou cliquez pour téléverser.',
+    'click_to_upload' => 'Cliquez pour téléverser',
+    'batch_upload_success' => 'Le téléversement de lots est réussi. Les fichiers sont en cours de traitement.',
+    'batch_upload_error' => 'Échec du téléversement de lots. Veuillez réessayer.',
+
+
     // Semaines / Libellés
-    's_week' => 'S. Semaine',
-    'w_week' => 'S. Semaine',
+    's_week' => 'Semaine',
+    'w_week' => 'Semaine',
     'week' => 'Semaine',
     'weekno' => '#Semaine',
-
-    // Login
-        'drivers'               => 'Chauffeurs',
-    'add_driver_btn'        => 'Ajouter un chauffeur',
-    'status'                => 'Statut',
-    'search_placeholder'    => 'Rechercher des chauffeurs...',
-    // Add these new keys for the login page
-    'login_title'           => 'Connexion',
-    'login_email_label'     => 'Adresse e-mail',
-    'login_email_placeholder' => 'Entrez votre e-mail',
-    'login_forgot_password' => 'Mot de passe oublié?',
-    'login_password_label'  => 'Mot de passe',
-    'login_password_placeholder' => 'Entrez votre mot de passe',
-    'login_remember_me'     => 'Se souvenir de moi',
-    'login_button'          => 'Connexion',
 
     // Calcul (table/liste)
     'intelcom_invoice' => 'Facture Intelcom',
@@ -70,11 +97,13 @@ return [
     'daysworked' => '#Jours',
     'bonus' => 'Prime',
     'cash_advance' => 'Avance',
-    'finalamount' => '$-Final',     // utilisé dans les en-têtes
-    'final_amount' => 'Montant final',    // compatibilité/ailleurs
+    'finalamount' => '$-Final',
+    'final_amount' => 'Montant final',
     'benefit' => 'Bénéfice',
     'calculatexx' => '#',
+    'calculate' => 'Calculer',
     'payment_details' => 'Détails de Paiement',
+    'payments' => 'Paiements',
     'calculation_for' => 'Calcul pour :driver - Semaine: :week',
 
     // Édition du calcul
@@ -82,10 +111,13 @@ return [
     'reset' => 'Réinitialiser',
     'edit_calculation_title' => 'Modifier le calcul',
     'broker_percentage' => 'Pourcentage du courtier',
-    // Garder les deux clés pour compatibilité avec différentes orthographes
     'vehicule_rental_price' => 'Prix de location du véhicule',
     'vehicle_rental_price' => 'Prix de location du véhicule',
     'percentage' => 'Pourcentage (%)',
+    'add_bonus' => 'Ajouter une prime',
+    'deduct_cash_advance' => 'Déduire une avance en espèces',
+    'vehicle_cost' => 'Coût du véhicule',
+    'additional_details' => 'Détails supplémentaires',
 
     // Actions / messages du calcul
     'calculation_update_success' => 'Calcul mis à jour avec succès.',
@@ -93,14 +125,9 @@ return [
     'confirm_reset_calculation' => 'Êtes-vous sûr de vouloir réinitialiser toutes les valeurs à 0 ?',
     'calculation_reset_success' => 'Le calcul a été réinitialisé avec succès.',
     'reset_failed' => 'Échec de la réinitialisation. Veuillez réessayer.',
-
-    // Téléversement / extraction PDF (héritage)
-    'drop_file_here' => 'Déposez le fichier PDF ici ou cliquez pour télécharger.',
     'pdf_file_requirements' => '(Seuls les fichiers PDF sont acceptés. Taille max: 5MB)',
     'pdf_extraction_failed' => 'Impossible d\'extraire les données requises du PDF. Veuillez vérifier le fichier.',
-    'file_upload_failed' => 'Échec du téléchargement du fichier.',
-
-    // Invites de calcul/enregistrement (héritage)
+    'file_upload_failed' => 'Échec du téléversement du fichier.',
     'start' => 'Démarrer',
     'final_amount_save_prompt' => 'Montant final : ',
     'wannasavit' => 'voulez-vous l\'enregistrer ?',
@@ -109,12 +136,7 @@ return [
     'saved_final_amount' => 'Enregistré. Montant final : ',
     'error_saving_calculation' => 'Erreur lors de l\'enregistrement du calcul.',
     'enter_broker_percentage' => 'Entrez le pourcentage du courtier (ex. 20)',
-
-    // Ajoutez ces clés dans le tableau retourné
-'home_option_a_title' => 'Accueil – Option A',
-'home_option_b_title' => 'Accueil – Option B',
-'home_option_c_title' => 'Accueil – Option C',
-'pays' => 'Paies',
-'stats' => 'Statistiques',
-'settings' => 'Paramètres',
+    'pays' => 'Paies',
+    'stats' => 'Statistiques',
+    'settings' => 'Paramètres',
 ];

@@ -8,8 +8,9 @@ use App\Http\Controllers\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
-| Language Switch Route (Stays outside the main group)
+| Language Switch Route
 |--------------------------------------------------------------------------
+| This route is handled separately and stays outside the main groups.
 */
 Route::get('/lang/{locale}', function ($locale) {
     if (in_array($locale, config('app.available_locales', ['en', 'fr']))) {
@@ -24,50 +25,58 @@ Route::get('/lang/{locale}', function ($locale) {
 |--------------------------------------------------------------------------
 | Main Application Routes
 |--------------------------------------------------------------------------
-|
-| This group applies the 'web' and 'localization' middleware to every
-| route inside it, for both guests and logged-in users.
-|
+| These routes are grouped by authentication and localization middleware.
 */
 Route::middleware(['web', \App\Http\Middleware\Localization::class])->group(function () {
 
     // --- Public Routes ---
-    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-    Route::post('/login', [AuthController::class, 'login']);
+    Route::controller(AuthController::class)->group(function () {
+        Route::get('/login', 'showLogin')->name('login');
+        Route::post('/login', 'login');
+        Route::get('/register', 'showRegister')->name('register');
+        Route::post('/register', 'register');
+        Route::get('/auth/google/redirect', 'redirectToGoogle')->name('auth.google.redirect');
+        Route::get('/auth/google/callback', 'handleGoogleCallback')->name('auth.google.callback');
+        Route::get('/register/phone', 'showPhoneNumberForm')->name('register.phone');
+        Route::post('/register/phone', 'storePhoneNumber')->name('register.phone.store');
+    });
+
     Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
 
     // --- Protected Routes (Requires Auth) ---
-    // The Localization middleware is no longer needed here
     Route::middleware('auth')->group(function () {
 
-        // Dashboard / Home
+        // Home
         Route::get('/', fn () => view('index'))->name('home');
 
-        /* Driver Management */
-        Route::get('/drivers', [DriverController::class, 'index'])->name('drivers');
-        Route::get('/drivers/{id}', [DriverController::class, 'show'])->name('drivers.show');
-        Route::get('/newdriver', fn () => view('newdriver'))->name('newdriver');
-        Route::post('/drivers/add', [DriverController::class, 'store'])->name('drivers.store');
-        Route::get('/drivers/{id}/edit', [DriverController::class, 'edit'])->name('drivers.edit');
-        Route::put('/drivers/{id}', [DriverController::class, 'update'])->name('drivers.update');
-        Route::delete('/drivers/{id}', [DriverController::class, 'destroy'])->name('drivers.delete');
+        // Driver Management Routes
+        Route::controller(DriverController::class)->group(function () {
+            Route::get('/drivers', 'index')->name('drivers');
+            Route::get('/drivers/{id}', 'show')->name('drivers.show');
+            Route::get('/newdriver', fn () => view('newdriver'))->name('newdriver');
+            Route::post('/drivers/add', 'store')->name('drivers.store');
+            Route::get('/drivers/{id}/edit', 'edit')->name('drivers.edit');
+            Route::put('/drivers/{id}', 'update')->name('drivers.update');
+            Route::delete('/drivers/{id}', 'destroy')->name('drivers.delete');
+        });
 
-        /* Calculations */
-        Route::get('/calculate/{driver}/{week}', [CalculationController::class, 'show'])->name('calculate.week');
-        Route::get('/drivers/{driver}/calculate/{week}', [CalculationController::class, 'show'])->name('calculate.show');
-        Route::post('/calculate/upload', [CalculationController::class, 'uploadPdf'])->name('calculate.upload');
-        Route::post('/calculate/save', [CalculationController::class, 'save'])->name('calculate.save');
-        Route::delete('/drivers/{driver}/calculate/{week}/reset', [CalculationController::class, 'reset'])->name('calculate.reset');
-        Route::get('/drivers/{driver}/calculate/{week}/edit', [CalculationController::class, 'edit'])->name('calculate.edit');
-        Route::put('/drivers/{driver}/calculate/{week}', [CalculationController::class, 'update'])->name('calculate.update');
-
-        /* Payment Details */
-        Route::get('paydetails/{driver}/{week}', [PaymentController::class, 'show'])->name('paydetails.show');
-
-        /* Home layout test pages */
-        Route::get('/home/a', fn () => view('home_option_a'))->name('home.a');
-        Route::get('/home/b', fn () => view('home_option_b'))->name('home.b');
-        Route::get('/home/c', fn () => view('home_option_c'))->name('home.c');
+        // Calculations Routes
+        Route::controller(CalculationController::class)->group(function () {
+            Route::get('/calculate/{driver}/{week}', 'show')->name('calculate.week');
+            Route::get('/drivers/{driver}/calculate/{week}', 'show')->name('calculate.show');
+            Route::post('/calculate/upload', 'uploadPdf')->name('calculate.upload');
+            Route::post('/calculate/save', 'save')->name('calculate.save');
+            Route::delete('/drivers/{driver}/calculate/{week}/reset', 'reset')->name('calculate.reset');
+            Route::get('/drivers/{driver}/calculate/{week}/edit', 'edit')->name('calculate.edit');
+            Route::put('/drivers/{driver}/calculate/{week}', 'update')->name('calculate.update');
+        });
+        
+        // Payment Management Routes
+        Route::controller(PaymentController::class)->group(function () {
+            Route::get('/payments', 'index')->name('payments.index');
+            Route::post('/payments/upload', 'batchUpload')->name('payments.upload');
+            Route::get('paydetails/{driver}/{week}', 'show')->name('paydetails.show');
+        });
     });
 });

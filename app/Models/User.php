@@ -8,7 +8,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class User extends Authenticatable
 {
+    
     use HasFactory, Notifiable;
+// In User.php
+
+public function broker()
+{
+    return $this->hasOne(Broker::class);
+}
 
     protected $fillable = [
         'full_name',
