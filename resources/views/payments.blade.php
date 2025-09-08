@@ -5,29 +5,95 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.css"
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
-        /* Table styling */
-        .products-table-card {
+        /* Full-screen overlay for progress only (no extra results table) */
+        #upload-container {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            top: 0;
+            background: rgba(255, 255, 255, 0.97);
+            z-index: 99999;
+            overflow-y: auto;
+            padding-top: 40px;
+            padding-bottom: 40px;
+            display: none;
+            /* JS toggles .show */
+            align-items: flex-start;
+            justify-content: center;
+            pointer-events: auto;
+        }
+
+        #upload-container.show {
+            display: flex !important;
+        }
+
+        #upload-container .upload-card {
+            width: 100%;
+            max-width: 98vw;
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            padding: 0;
+        }
+
+        .upload-table-responsive {
             background: #fff;
             border-radius: 8px;
             box-shadow: 0 3px 16px rgba(30, 34, 90, 0.07), 0 1.5px 4px rgba(30, 34, 90, 0.05);
             padding: 0;
+            margin: 0 auto;
+            max-width: 97%;
         }
 
-        .text-success {
-            color: #1cc88a !important;
+        body.dz-uploading {
+            overflow: hidden;
         }
 
-        .text-danger {
-            color: #e74a3b !important;
+        @media (max-width: 991.98px) {
+            #upload-container {
+                padding-left: 0;
+                padding-right: 0;
+            }
+
+            .upload-table-responsive {
+                border-radius: 0;
+                max-width: 100%;
+            }
         }
 
-        /* On mobile hide status column */
+        @media (max-width: 575.98px) {
+            #upload-container {
+                padding-top: 10px;
+                padding-bottom: 10px;
+            }
+
+            .upload-table-responsive {
+                max-width: 100vw;
+                border-radius: 0;
+            }
+        }
+
+        /* MOBILE: on small screens, show only 2nd and 5th columns (1-based) */
         @media (max-width: 575.98px) {
 
-            #drivers-table th:nth-child(1),
-            #drivers-table td:nth-child(1) {
-                display: none;
+            #products-table thead th:not(:nth-child(2)):not(:nth-child(5)),
+            #products-table tbody td:not(:nth-child(2)):not(:nth-child(5)) {
+                display: none !important;
             }
+
+            #products-table thead th.dtr-control,
+            #products-table tbody td.dtr-control {
+                display: none !important;
+            }
+        }
+
+        #upload-status {
+            margin-bottom: 1rem;
+        }
+
+        thead.table-dark th {
+            color: #fff;
         }
     </style>
 @endpush
@@ -35,7 +101,17 @@
 @section('content')
     <div id="main-content">
         <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mt-3 mb-3 page-title-box">
-            <h4 class="page-title m-0">{{ __('messages.payments_page_title') }}</h4>
+            <h4 class="page-title m-0">Payments</h4>
+        </div>
+
+        <div id="upload-status-alert-placeholder"></div>
+
+        <div class="mb-3 search-bar">
+            <div class="input-group">
+                <input type="text" id="table-search-input" class="form-control" placeholder="Search by name, phone or ID"
+                    aria-label="Search">
+                <button class="btn btn-info" id="table-search-button">Search</button>
+            </div>
         </div>
 
         @if (session('success'))
@@ -53,7 +129,7 @@
 
         <div class="card mb-4 pdf-dropzone-card" id="upload-card">
             <div class="card-header">
-                <h5 class="card-title">{{ __('messages.batch_upload') }}</h5>
+                <h5 class="card-title">Batch invoice Upload</h5>
             </div>
             <div class="card-body">
                 <form action="{{ route('payments.upload') }}" method="post" class="dropzone" id="batch-upload-dropzone"
@@ -61,25 +137,23 @@
                     @csrf
                     <div class="dz-message needsclick">
                         <i class="h1 text-muted dripicons-cloud-upload"></i>
-                        <h3>{{ __('messages.drop_files_here') }}</h3>
-                        <span class="text-muted font-13">{{ __('messages.pdf_file_requirements') }}</span>
+                        <h3>Drop files here</h3>
+                        <span class="text-muted font-13">PDFs only. Max 5MB each.</span>
                     </div>
                 </form>
             </div>
         </div>
 
-        <!-- Upload status placeholder -->
-        <div id="upload-status" class="d-none mt-3"></div>
-
-        <div class="card products-table-card mt-4">
+        <div class="card products-table-card">
             <div class="card-body">
-                <table class="table table-centered table-striped dt-responsive nowrap w-100" id="drivers-table">
+                <table class="table table-centered table-striped dt-responsive nowrap w-100" id="products-table">
                     <thead class="table-dark">
                         <tr>
-                            <th>{{ __('messages.status') }}</th>
-                            <th>{{ __('messages.driver') }}</th>
-                            <th>{{ __('messages.total') }}</th>
-                            <th>{{ __('messages.days_worked') }}</th>
+                            <th id="col-expand"></th>
+                            <th id="col-status" class="text-center">Status</th>
+                            <th>Driver</th>
+                            <th>Phone</th>
+                            <th>Added By</th>
                             <th class="text-center">#</th>
                         </tr>
                     </thead>
@@ -87,21 +161,23 @@
                         @foreach ($drivers as $driver)
                             @php
                                 $firstName = $driver->first_name ?? explode(' ', $driver->full_name)[0];
+                                $addedByUser = \App\Models\User::find($driver->added_by);
                             @endphp
                             <tr>
-                                <td>
+                                <td class="col-expand"></td>
+                                <td class="text-center col-status">
                                     @if ($driver->active == 1)
-                                        <i class="mdi mdi-circle text-success"></i>
+                                        <i class="mdi mdi-circle text-success" aria-label="status"></i>
                                     @else
-                                        <i class="mdi mdi-circle text-danger"></i>
+                                        <i class="mdi mdi-circle text-danger" aria-label="status"></i>
                                     @endif
                                 </td>
                                 <td>{{ $driver->driver_id }} - {{ $firstName }}</td>
-                                <td>0</td>
-                                <td>0</td>
+                                <td>{{ $driver->phone_number }}</td>
+                                <td>{{ $addedByUser ? $addedByUser->full_name : '' }}</td>
                                 <td class="text-center">
-                                    <a href="{{ route('drivers.show', $driver->id) }}" class="action-icon"
-                                        aria-label="{{ __('messages.view') }}" title="{{ __('messages.view') }}">
+                                    <a href="{{ route('drivers.show', $driver->id) }}" class="action-icon" aria-label="View"
+                                        title="View">
                                         <i class="mdi mdi-arrow-right-bold-box text-info"></i>
                                     </a>
                                 </td>
@@ -112,6 +188,37 @@
             </div>
         </div>
     </div>
+
+    <!-- Progress overlay (no extra results table) -->
+    {{-- <div id="upload-container" aria-hidden="true" role="dialog" aria-modal="true">
+        <div class="upload-card">
+            <div class="upload-table-responsive">
+                <div class="container p-3">
+                    <div id="upload-status" class="mb-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong id="upload-status-title">Uploading files...</strong>
+                                <div id="upload-status-message" class="small text-muted">Please wait</div>
+                            </div>
+                            <div>
+                                <button id="upload-cancel-button" class="btn btn-light btn-sm"
+                                    type="button">Cancel</button>
+                                <button id="upload-close-overlay" class="btn btn-primary btn-sm d-none"
+                                    type="button">Close</button>
+                            </div>
+                        </div>
+                        <div class="progress mt-2" style="height:8px;">
+                            <div id="upload-progress-bar" class="progress-bar" role="progressbar" style="width:0%">0%</div>
+                        </div>
+                    </div>
+
+                    <div class="small text-muted">
+                        Results will replace the main table when upload completes.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> --}}
 @endsection
 
 @push('scripts')
@@ -139,109 +246,48 @@
         });
 
         Dropzone.autoDiscover = false;
+
         var myDropzone = new Dropzone("#batch-upload-dropzone", {
             url: "{{ route('payments.upload') }}",
             paramName: "files",
-            maxFilesize: 5,
+            maxFilesize: 5, // Limit each file size to 5 MB
             acceptedFiles: ".pdf",
             addRemoveLinks: true,
-            parallelUploads: 9999,
-            uploadMultiple: true,
+            parallelUploads: 999, // Increase parallel uploads
+            uploadMultiple: false, // Upload files individually
+            maxFiles: 999, // Allow up to 999 files in a single upload
             autoProcessQueue: true,
+            timeout: 0, // Disable timeout
             headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // Include CSRF token
             },
-            dictDefaultMessage: "<h3>{{ __('messages.drop_files_here') }}</h3><br><span>{{ __('messages.click_to_upload') }}</span>",
+            dictDefaultMessage: "<h3>Drop files here</h3><br><span>Click to upload</span>",
             init: function() {
-                this.on("processingmultiple", function(files) {
-                    $('#upload-status')
-                        .removeClass('d-none')
-                        .html('<div class="alert alert-info">⏳ Uploading files...</div>');
+                this.on("processing", function(file) {
+                    // Hide the upload card immediately when the upload starts
+                    $('#upload-card').hide();
                 });
 
-                this.on("successmultiple", function(files, response) {
-                    $('#upload-card').hide(); // hide upload card
-
-                    var tbody = $('#drivers-table tbody');
-                    tbody.empty();
-
-                    let driverCount = 0;
-
-                    // Success
-                    if (response.uploaded && response.uploaded.length) {
-                        response.uploaded.forEach(function(file) {
-                            const driverId = file.driver_id ?? '';
-                            const driverName = file.full_name ?? '';
-                            const driverLink = file.driver_id_db ?
-                                `{{ url('drivers') }}/${file.driver_id_db}` : '#';
-                            const statusIcon = `<i class="mdi mdi-circle text-success"></i>`;
-                            const row = `
-                                <tr>
-                                    <td>${statusIcon}</td>
-                                    <td>${driverId} - ${driverName}</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td class="text-center">
-                                        <a href="${driverLink}" class="action-icon" aria-label="{{ __('messages.view') }}" title="{{ __('messages.view') }}">
-                                            <i class="mdi mdi-arrow-right-bold-box text-info"></i>
-                                        </a>
-                                    </td>
-                                </tr>`;
-                            tbody.append(row);
-                            driverCount++;
-                        });
-                    }
-
-                    // Failed
-                    if (response.failed && response.failed.length) {
-                        response.failed.forEach(function(file) {
-                            const statusIcon = `<i class="mdi mdi-circle text-danger"></i>`;
-                            const row = `
-                                <tr class="table-danger">
-                                    <td>${statusIcon}</td>
-                                    <td>${file.name} - Not Found</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td></td>
-                                </tr>`;
-                            tbody.append(row);
-                        });
-                    }
-
-                    // Replace upload status with card
-                    $('#upload-status').html(`
-                        <div class="card bg-info">
-                            <div class="card-body profile-user-box">
-                                <div class="row">
-                                    <div class="col-sm-8">
-                                        <h4 class="mt-1 mb-1 text-white">${driverCount} drivers found</h4>
-                                        <p class="font-13 text-white-50">Select a week and calculate ?</p>
-                                        <select class="form-select w-auto" id="example-select">
-                                            <option>1</option>
-                                            <option>2</option>
-                                            <option>3</option>
-                                            <option>4</option>
-                                            <option>5</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="text-center mt-sm-0 mt-3 text-sm-end">
-                                            <button type="button" class="btn btn-light">
-                                                <i class="mdi mdi-account-edit me-1"></i> Edit Profile
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    `);
+                this.on("success", function(file, response) {
+                    console.log("File uploaded successfully: ", file.name);
                 });
 
-                this.on("errormultiple", function(files, response) {
-                    $('#upload-status')
-                        .removeClass('d-none')
-                        .html(
-                            '<div class="alert alert-danger">❌ Upload failed. Please try again.</div>');
+                this.on("queuecomplete", function() {
+                    console.log("All files have been uploaded.");
+
+                    // Show alert summarizing the upload results
+                    const totalUploaded = myDropzone.getAcceptedFiles().length; // Count accepted files
+                    $('#upload-status-alert-placeholder').html(`
+                <div class="alert alert-primary alert-dismissible bg-primary text-white border-0 fade show" role="alert">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <strong>Uploading done : </strong> files uploaded : ${totalUploaded}
+                </div>
+            `);
+                });
+
+                this.on("error", function(file, response) {
+                    console.error("Error uploading file: ", file.name, response);
+                    alert("❌ Upload failed. Please try again.");
                 });
             }
         });
