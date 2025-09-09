@@ -137,7 +137,7 @@
                                 <div class="mb-3 text-center">
                                     <div class="position-relative">
                                         <hr class="bg-light">
-                                        <div class="divider-text">{{ __('messages.login_or') ?? 'OR' }}</div>
+                                        <div class="divider-text">{{ __('messages.login_or') }}</div>
                                     </div>
                                 </div>
                                 
@@ -149,7 +149,7 @@
                                             <path fill="#FBBC05" d="M4.5 10.48A4.59 4.59 0 0 1 4.25 9c0-.51.09-1.02.25-1.48V5.43H1.96a7.86 7.86 0 0 0 0 7.14l2.54-2.09Z"/>
                                             <path fill="#EB4335" d="M8.98 3.77c1.17 0 2.23.4 3.06 1.2l2.3-2.3A7.55 7.55 0 0 0 8.98 1a7.86 7.86 0 0 0-7.02 4.43l2.54 2.09c.64-1.89 2.4-3.29 4.48-3.29Z"/>
                                         </svg>
-                                        {{ __('messages.login_google') ?? 'Continue with Google' }}
+                                        {{ __('messages.login_google') }}
                                     </a>
                                 </div>
                                 
