@@ -27,6 +27,8 @@ return [
     'login_password_placeholder' => 'Enter your password',
     'login_remember_me'     => 'Remember me',
     'login_button'          => 'Log In',
+    'login_or'              => 'OR',
+    'login_google'          => 'Continue with Google',
     'login_no_account'      => 'Don\'t have an account?',
     'register_with_google' => 'Continue with Google',
     'register_with_apple' => 'Continue with Apple',

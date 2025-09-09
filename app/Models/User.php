@@ -26,6 +26,7 @@ public function broker()
         'password',
         'joined_date',
         'status',
+        'google_id',
     ];
 
     protected $hidden = [
