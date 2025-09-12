@@ -1,3 +1,5 @@
+/* (Existing styles preserved exactly up to previous mobile Active switch rules) */
+
 /* DataTables pagination: compact, single border, no double stroke */
 .dataTables_wrapper .dataTables_paginate .pagination {
     justify-content: center !important;
@@ -27,7 +29,7 @@
 .dataTables_wrapper .dataTables_paginate .paginate_button:active {
     background: #a3bffa !important;
     color: #fff !important;
-    border: 1px solid #a3bffa !important; /* ensure single border */
+    border: 1px solid #a3bffa !important;
     font-weight: 600;
     opacity: 1;
     box-shadow: none !important;
@@ -61,70 +63,54 @@
     box-shadow: none !important;
 }
 
-/* Remove Bootstrap's box-shadow on active/focused buttons */
 .dataTables_wrapper .dataTables_paginate .pagination .page-item.active .page-link,
 .dataTables_wrapper .dataTables_paginate .pagination .page-link:focus {
     box-shadow: none !important;
 }
 
-/* Remove Bootstrap's page-link border/background for all pagination */
 .dataTables_wrapper .dataTables_paginate .pagination .page-link {
     border: none !important;
     background: none !important;
 }
-/* Make the right slot center perfectly (override theme paddings) */
+
 #user-menu-toggle {
-  width: 56px !important;        /* match avatar slot */
-  height: 60px !important;       /* set to your navbar height */
-  padding: 0 !important;
-  display: flex !important;
-  align-items: center !important;   /* vertical center */
-  justify-content: center !important; /* horizontal center */
-  line-height: normal !important;
-  position: relative;
-  text-align: center !important;
+    width: 56px !important;
+    height: 60px !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    line-height: normal !important;
+    position: relative;
+    text-align: center !important;
 }
 
-/* On larger screens (desktops), expand the user menu to show name/role */
 @media (min-width: 992px) {
-  #user-menu-toggle {
-    width: auto !important;
-    justify-content: flex-start !important;
-    padding: 0 1rem !important; /* Restore horizontal padding */
-  }
+    #user-menu-toggle {
+        width: auto !important;
+        justify-content: flex-start !important;
+        padding: 0 1rem !important;
+    }
 }
 
-/* Override absolute positioning for the avatar to allow flex centering */
-#user-menu-toggle .account-user-avatar {
-    position: static;
-}
+#user-menu-toggle .account-user-avatar { position: static; }
 
-/* Initials circle same box as image avatars */
 #user-initials {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  font-weight: 600;
-  /* line-height is not needed with flex centering and can cause issues.
-     The d-inline-flex classes on the element will handle centering. */
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-weight: 600;
 }
 
-/* The visibility of #user-meta is now handled by Bootstrap's responsive
-   display classes (d-none d-lg-block) in the Blade template. */
-           #drivers-datatable {
-            width: 100% !important;
-        }
-        #products-table {
-  width: 100% !important;
-  min-width: 0 !important;
-  max-width: 100% !important;
-}
-.card-body {
-  width: auto !important;
-  min-width: 0 !important;
+#drivers-datatable { width: 100% !important; }
+#products-table {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
 }
 
-/* Make expand column very narrow */
+.card-body { width: auto !important; min-width: 0 !important; }
+
 #products-table #col-expand,
 #products-table .col-expand {
     width: 25px;
@@ -133,7 +119,6 @@
     padding-right: 0;
 }
 
-/* Make status column narrow */
 #products-table #col-status,
 #products-table .col-status {
     width: 35px;
@@ -141,99 +126,190 @@
     padding-left: 0;
     padding-right: 0;
 }
+
 #products-table td.dtr-control::before,
 #products-table th.dtr-control::before {
-    /* content: "▶";               arrow instead of + */
-    background-color: #3aafd1 !important; /* custom color */
-    
-    color: #ffffff !important;  /* custom color */
+    background-color: #3aafd1 !important;
+    color: #ffffff !important;
     font-weight: bold;
 }
 
-        .dt-paging {
-            display: flex;
-            justify-content: center;
-        }
+.dt-paging { display: flex; justify-content: center; }
 
+.social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    border: 1px solid #dee2e6;
+    margin-bottom: 1rem;
+}
+.social-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+.social-btn svg { width: 24px; height: 24px; margin-right: 12px; }
+.social-btn-google { background:#fff; color:#495057; }
+.social-btn-google:hover { background:#f8f9fa; }
+.social-btn-apple { background:#000; color:#fff; }
+.social-btn-apple:hover { background:#222; }
 
-        .social-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.75rem;
-            border-radius: 0.5rem;
-            text-decoration: none;
-            font-weight: 600;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            border: 1px solid #dee2e6;
-            margin-bottom: 1rem;
-        }
+.separator {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #adb5bd;
+    margin: 1.5rem 0;
+}
+.separator::before,
+.separator::after {
+    content:'';
+    flex:1;
+    border-bottom:1px solid #dee2e6;
+}
+.separator:not(:empty)::before { margin-right:.5em; }
+.separator:not(:empty)::after { margin-left:.5em; }
 
-        .social-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
+.form-container { animation: slideUp 0.6s ease-out forwards; }
+@keyframes slideUp {
+    from { opacity:0; transform:translateY(20px); }
+    to { opacity:1; transform:translateY(0); }
+}
 
-        .social-btn svg {
-            width: 24px;
-            height: 24px;
-            margin-right: 12px;
-        }
+#loader-div {
+    display:none;
+    position:fixed;
+    top:0; left:0;
+    width:100vw; height:100vh;
+    z-index:2000;
+    background:rgba(20,20,20,0.96);
+    opacity:0;
+    transition:opacity .3s;
+}
+#upload-card { transition:opacity .3s; }
 
-        .social-btn-google {
-            background-color: #fff;
-            color: #495057;
-        }
+/* Payments / uploads table widths */
+#uploads-table th.control,
+#uploads-table td.control {
+    width:32px;
+    padding:.5rem .5rem;
+}
+#uploads-table th.select-col,
+#uploads-table td.select-col {
+    width:46px;
+    text-align:center;
+    white-space:nowrap;
+}
+#uploads-table th:nth-child(4),
+#uploads-table th:nth-child(5),
+#uploads-table th:nth-child(6),
+#uploads-table td:nth-child(4),
+#uploads-table td:nth-child(5),
+#uploads-table td:nth-child(6){
+    width:70px;
+    white-space:nowrap;
+}
 
-        .social-btn-google:hover {
-            background-color: #f8f9fa;
-        }
+.table-nowrap td,
+.table-nowrap th { white-space:nowrap; }
 
-        .social-btn-apple {
-            background-color: #000;
-            color: #fff;
-        }
+.dt-top { gap:.75rem; flex-wrap:nowrap !important; }
 
-        .social-btn-apple:hover {
-            background-color: #222;
-        }
+@media (max-width:576px){
+    .dt-top {
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+    }
+    .dt-top .dataTables_length,
+    .dt-top .dataTables_filter {
+        flex:0 0 auto;
+        width:auto !important;
+        margin:0;
+    }
+    .dt-top .dataTables_length select { width:70px; }
+    .dt-top .dataTables_filter label {
+        display:flex;
+        align-items:center;
+        gap:.25rem;
+        margin:0;
+    }
+    .dt-top .dataTables_filter input { width:150px; }
+}
+@media (min-width:577px){
+    .dt-top { flex-direction:row; }
+    .dt-top .dataTables_filter { margin-left:auto; }
+}
 
-        .separator {
-            display: flex;
-            align-items: center;
-            text-align: center;
-            color: #adb5bd;
-            margin: 1.5rem 0;
-        }
+table.dataTable.dtr-inline.collapsed>tbody>tr>td.dtr-control:before,
+table.dataTable.dtr-inline.collapsed>tbody>tr>th.dtr-control:before {
+    line-height:1.1;
+}
+.dt-row-details { font-size:.8125rem; }
+.dt-row-details div+div { border-top:1px solid #eee; }
 
-        .separator::before,
-        .separator::after {
-            content: '';
-            flex: 1;
-            border-bottom: 1px solid #dee2e6;
-        }
+#products-table td.control,
+#products-table th.control {
+    width:32px;
+    padding:.5rem .5rem;
+}
 
-        .separator:not(:empty)::before {
-            margin-right: .5em;
-        }
+/* Detail active line base styling */
+.dt-row-details .detail-active-line {
+    display:flex;
+    align-items:center;
+    gap:.5rem;
+    padding:.25rem 0;
+    flex-wrap:nowrap;
+}
 
-        .separator:not(:empty)::after {
-            margin-left: .5em;
-        }
+/* When renderer outputs switch-only (mobile) */
+.dt-row-details .detail-active-line.switch-only {
+    justify-content:flex-start;
+}
+.dt-row-details .detail-active-line.switch-only strong {
+    display:none !important;
+}
 
-        /* Form Animation */
-        .form-container {
-            animation: slideUp 0.6s ease-out forwards;
-        }
+.driver-switch-label {
+width: 70px !important;
+}
 
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
+.driver-switch-label ::after {
+padding-left: 20px !important;
+}
+.driver-switch-label ::before {
+padding-left: 20px !important;
+}
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+/* --- Mobile centered logo (safe minimal version) --- */
+.navbar-custom {
+    position: relative; /* ensure positioning context */
+}
+
+.mobile-centered-logo {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /*pointer-events: none; /* prevents blocking other clicks */
+    z-index: 5;
+}
+
+.mobile-centered-logo .mobile-logo-img {
+    height: 22px; /* smaller size */
+    width: auto;
+    max-width: 120px;
+    display: block;
+    object-fit: contain;
+}
+
+@media (min-width: 992px) {
+    .mobile-centered-logo {
+        display: none;
+    }
+}

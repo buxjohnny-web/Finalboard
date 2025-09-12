@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     // Navigation / Commun
     'home' => 'Accueil',
     'back' => 'Retour',
@@ -13,7 +12,7 @@ return [
     'close' => 'Fermer',
     'save' => 'Enregistrer',
     'cancel' => 'Annuler',
-    'status' => 'Statut',
+    'status' => '#',
     'added_by' => 'Ajouté par',
     'created_on' => 'Créé le',
 
@@ -75,14 +74,25 @@ return [
     'driver_updated_success' => 'Conducteur mis à jour avec succès !',
     'driver_deleted_success' => 'Conducteur supprimé avec succès.',
     'driver' => 'Chauffeur',
+    'active' => 'Actif',
+    'default_percentage' => 'Pourcentage par défaut',
+    'default_rental_price' => 'Prix de location par défaut',
 
     // Paiements
     'payments_page_title' => 'Paiements',
-    'batch_upload' => 'Téléversement de lots de fiches de paie',
-    'drop_files_here' => 'Déposez les fichiers PDF ici ou cliquez pour téléverser.',
+    'batch_upload' => 'Téléversement groupé',
+    'drop_files_here' => 'Déposez les fichiers ici',
     'click_to_upload' => 'Cliquez pour téléverser',
     'batch_upload_success' => 'Le téléversement de lots est réussi. Les fichiers sont en cours de traitement.',
     'batch_upload_error' => 'Échec du téléversement de lots. Veuillez réessayer.',
+    'uploaded_invoices_summary' => 'Récapitulatif des factures téléversées',
+    'payments_processing_uploads' => 'Traitement des téléversements ...',
+    'payments_processing_wait' => 'Veuillez patienter, extraction des données (minimum 5 secondes)',
+    'pdf_only_max' => 'PDF uniquement. 5 Mo max chacun.',
+    'id_name' => 'ID - Nom',
+    'total_parcels' => 'Total Colis',
+    'payments_completed_valid_drivers' => 'Terminé. Chauffeurs valides : :count.',
+    'payments_summary_pattern' => 'Chauffeurs : :drivers | Trouvés : :found | Non trouvés : :not_found',
 
 
     // Semaines / Libellés
@@ -94,7 +104,7 @@ return [
     // Calcul (table/liste)
     'intelcom_invoice' => 'Facture Intelcom',
     'total_invoice' => 'Facture Totale',
-    'daysworked' => '#Jours',
+    'daysworked' => 'Jours travaillés',
     'bonus' => 'Prime',
     'cash_advance' => 'Avance',
     'finalamount' => '$-Final',

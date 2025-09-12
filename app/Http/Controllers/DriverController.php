@@ -17,22 +17,28 @@ class DriverController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'full_name'      => ['required', 'string', 'max:255'],
-            'phone_number'   => ['nullable', 'string', 'max:20'],
-            'driver_id'      => ['required', 'string', 'max:50', 'unique:drivers,driver_id'],
-            'license_number' => ['nullable', 'string', 'max:50'],
-            'ssn'            => ['nullable', 'string', 'max:50'],
+            'full_name'            => ['required', 'string', 'max:255'],
+            'phone_number'         => ['nullable', 'string', 'max:20'],
+            'driver_id'            => ['required', 'string', 'max:50', 'unique:drivers,driver_id'],
+            'license_number'       => ['nullable', 'string', 'max:50'],
+            'ssn'                  => ['nullable', 'string', 'max:50'],
+            'default_percentage'   => ['nullable', 'numeric', 'min:0', 'max:100'],
+            'default_rental_price' => ['nullable', 'numeric', 'min:0'],
         ]);
 
-        Driver::create([
-            'full_name'      => $request->full_name,
-            'phone_number'   => $request->phone_number,
-            'driver_id'      => $request->driver_id,
-            'license_number' => $request->license_number,
-            'ssn'            => $request->ssn,
-            'added_by'       => Auth::id(),
-            'active'         => true,
-        ]);
+        $data = [
+            'full_name'            => $request->full_name,
+            'phone_number'         => $request->phone_number,
+            'driver_id'            => $request->driver_id,
+            'license_number'       => $request->license_number,
+            'ssn'                  => $request->ssn,
+            'default_percentage'   => $request->filled('default_percentage') ? $request->input('default_percentage') : null,
+            'default_rental_price' => $request->filled('default_rental_price') ? $request->input('default_rental_price') : null,
+            'added_by'             => Auth::id(),
+            'active'               => true,
+        ];
+
+        Driver::create($data);
 
         return redirect()->route('drivers')->with('success', __('messages.driver_added_success'));
     }
@@ -69,25 +75,33 @@ class DriverController extends Controller
         $driver = Driver::findOrFail($id);
 
         $request->validate([
-            'full_name'      => ['required', 'string', 'max:255'],
-            'phone_number'   => ['nullable', 'string', 'max:20'],
-            'driver_id'      => [
+            'full_name'            => ['required', 'string', 'max:255'],
+            'phone_number'         => ['nullable', 'string', 'max:20'],
+            'driver_id'            => [
                 'required',
                 'string',
                 'max:50',
                 Rule::unique('drivers', 'driver_id')->ignore($driver->id),
             ],
-            'license_number' => ['nullable', 'string', 'max:50'],
-            'ssn'            => ['nullable', 'string', 'max:50'],
+            'license_number'       => ['nullable', 'string', 'max:50'],
+            'ssn'                  => ['nullable', 'string', 'max:50'],
+            'default_percentage'   => ['nullable', 'numeric', 'min:0', 'max:100'],
+            'default_rental_price' => ['nullable', 'numeric', 'min:0'],
         ]);
 
-        $driver->update($request->only([
+        $data = $request->only([
             'full_name',
             'phone_number',
             'driver_id',
             'license_number',
             'ssn',
-        ]));
+        ]);
+
+        // Ensure empty strings are saved as null for nullable decimals
+        $data['default_percentage']   = $request->filled('default_percentage') ? $request->input('default_percentage') : null;
+        $data['default_rental_price'] = $request->filled('default_rental_price') ? $request->input('default_rental_price') : null;
+
+        $driver->update($data);
 
         return redirect()->route('drivers')->with('success', __('messages.driver_updated_success'));
     }
@@ -114,5 +128,18 @@ class DriverController extends Controller
     {
         $driver = Driver::findOrFail($id);
         return view('driver', compact('driver'));
+    }
+
+    /**
+     * Toggle the active status of the specified driver.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function toggleActive(Driver $driver, Request $request)
+    {
+        $driver->active = $request->boolean('active') ? 1 : 0;
+        $driver->save();
+
+        return response()->json(['success' => true, 'active' => $driver->active]);
     }
 }

@@ -17,7 +17,11 @@
     <link href="{{ asset('assets/css/dataTables.bootstrap5.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/responsive.bootstrap5.css') }}" rel="stylesheet" type="text/css" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
+    {{-- Copilot reminder:
+     Never write CSS inside Blade files.
+     Always use class names only.
+     CSS belongs in: public/assets/css/custom.css
+    --}}
 </head>
 
 <body class="loading" data-layout-color="light" data-leftbar-theme="dark" data-layout-mode="fluid"

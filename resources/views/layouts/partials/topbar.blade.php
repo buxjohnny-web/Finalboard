@@ -3,6 +3,13 @@
 @endphp
 
 <div class="navbar-custom topnav-navbar-dark">
+    {{-- Mobile centered logo (only visible < lg) --}}
+    <div class="mobile-centered-logo d-lg-none">
+        {{-- If you want it clickable, remove pointer-events:none in CSS and wrap with <a href="{{ route('drivers') }}"> --}}
+        <a href="{{ route('home') }}"><img src="{{ asset('assets/images/logo.svg') }}" alt="Logo"
+                class="mobile-logo-img"></a>
+    </div>
+
     <ul class="list-unstyled topbar-menu float-end mb-0">
         <li class="dropdown notification-list topbar-dropdown">
             <a class="text-white nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#"
@@ -30,25 +37,30 @@
                 @endforeach
             </div>
         </li>
+
         <li class="dropdown notification-list">
             <a id="user-menu-toggle" class="nav-link dropdown-toggle nav-user arrow-none me-0" data-bs-toggle="dropdown"
                 href="#" role="button" aria-haspopup="false" aria-expanded="false">
+
                 <span class="account-user-avatar d-lg-none">
                     <span id="user-initials"
                         class="text-white rounded-circle d-inline-flex align-items-center justify-content-center">
                         {{ strtoupper(substr(Auth::user()->full_name, 0, 1)) }}{{ strtoupper(substr(explode(' ', Auth::user()->full_name)[1] ?? '', 0, 1)) }}
                     </span>
                 </span>
+
                 <span id="user-meta" class="d-none d-lg-block">
                     <span class="text-white account-user-name">{{ Auth::user()->full_name }}</span>
                     <span class="text-white account-position">{{ strtoupper(Auth::user()->role) }}</span>
                 </span>
             </a>
+
             <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated topbar-dropdown-menu profile-dropdown">
                 <a href="javascript:void(0);" class="dropdown-item notify-item">
                     <i class="mdi mdi-account-edit me-1"></i> Settings
                 </a>
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">
                     @csrf
                 </form>
 

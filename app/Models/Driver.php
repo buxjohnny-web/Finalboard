@@ -22,10 +22,14 @@ class Driver extends Model
         'ssn',
         'added_by',
         'active',
+        'default_percentage',
+        'default_rental_price',
     ];
 
     protected $casts = [
         'active' => 'boolean',
+        'default_percentage' => 'decimal:2',
+        'default_rental_price' => 'decimal:2',
     ];
 
     /**

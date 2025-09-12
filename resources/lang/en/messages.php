@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     // Navigation / Common
     'home' => 'Home',
     'back' => 'Back',
@@ -13,7 +12,7 @@ return [
     'close' => 'Close',
     'save' => 'Save',
     'cancel' => 'Cancel',
-    'status' => 'Status',
+    'status' => '#',
     'added_by' => 'Added By',
     'created_on' => 'Created On',
 
@@ -75,15 +74,25 @@ return [
     'driver_updated_success' => 'Driver updated successfully!',
     'driver_deleted_success' => 'Driver deleted successfully.',
     'driver' => 'Driver',
+    'active' => 'Active',
+    'default_percentage' => 'Default Percentage',
+    'default_rental_price' => 'Default Rental Price',
 
     // Payments
     'payments_page_title' => 'Payments',
-    'batch_upload' => 'Batch invoice Upload',
-    'drop_files_here' => 'Drop PDF files here or click to upload.',
+    'batch_upload' => 'Batch Invoice Upload',
+    'drop_files_here' => 'Drop files here',
     'click_to_upload' => 'Click to upload',
     'batch_upload_success' => 'Batch upload successful. Files are being processed.',
     'batch_upload_error' => 'Batch upload failed. Please try again.',
-
+    'uploaded_invoices_summary' => 'Uploaded Invoices Summary',
+    'payments_processing_uploads' => 'Processing uploads ...',
+    'payments_processing_wait' => 'Please wait, extracting invoice data (minimum 5 seconds)',
+    'pdf_only_max' => 'PDFs only. Max 5MB each.',
+    'id_name' => 'ID - Name',
+    'total_parcels' => 'Total Parcels',
+    'payments_completed_valid_drivers' => 'Completed. Valid drivers: :count.',
+    'payments_summary_pattern' => 'Drivers: :drivers | Found: :found | Not Found: :not_found',
 
     // Weeks / Labels
     's_week' => 'Week',

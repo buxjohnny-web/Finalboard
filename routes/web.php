@@ -59,6 +59,7 @@ Route::middleware(['web', \App\Http\Middleware\Localization::class])->group(func
             Route::get('/drivers/{id}/edit', 'edit')->name('drivers.edit');
             Route::put('/drivers/{id}', 'update')->name('drivers.update');
             Route::delete('/drivers/{id}', 'destroy')->name('drivers.delete');
+            Route::post('/drivers/{driver}/toggle-active', 'toggleActive')->name('drivers.toggleActive');
         });
 
         // Calculations Routes
