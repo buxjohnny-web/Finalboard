@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\CalculationController;
 use App\Http\Controllers\PaymentController;
@@ -10,7 +11,6 @@ use App\Http\Controllers\PaymentController;
 |--------------------------------------------------------------------------
 | Language Switch Route
 |--------------------------------------------------------------------------
-| This route is handled separately and stays outside the main groups.
 */
 Route::get('/lang/{locale}', function ($locale) {
     if (in_array($locale, config('app.available_locales', ['en', 'fr']))) {
@@ -20,12 +20,10 @@ Route::get('/lang/{locale}', function ($locale) {
     return redirect()->back();
 })->name('lang.switch');
 
-
 /*
 |--------------------------------------------------------------------------
 | Main Application Routes
 |--------------------------------------------------------------------------
-| These routes are grouped by authentication and localization middleware.
 */
 Route::middleware(['web', \App\Http\Middleware\Localization::class])->group(function () {
 
@@ -42,12 +40,11 @@ Route::middleware(['web', \App\Http\Middleware\Localization::class])->group(func
     });
 
     Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.settings');
-    Route::post('/profile', [ProfileController::class, 'update'])->name('profile.settings.update');
 
-
-    // --- Protected Routes (Requires Auth) ---
-    Route::middleware('auth')->group(function () {
+    // Profile Routes with profile.complete middleware
+    Route::middleware(['auth','profile.complete'])->group(function () {
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.settings');
+        Route::post('/profile', [ProfileController::class, 'update'])->name('profile.settings.update');
 
         // Home
         Route::get('/', fn () => view('index'))->name('home');
@@ -74,7 +71,7 @@ Route::middleware(['web', \App\Http\Middleware\Localization::class])->group(func
             Route::get('/drivers/{driver}/calculate/{week}/edit', 'edit')->name('calculate.edit');
             Route::put('/drivers/{driver}/calculate/{week}', 'update')->name('calculate.update');
         });
-        
+
         // Payment Management Routes
         Route::controller(PaymentController::class)->group(function () {
             Route::get('/payments', 'index')->name('payments.index');
