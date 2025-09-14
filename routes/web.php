@@ -42,6 +42,8 @@ Route::middleware(['web', \App\Http\Middleware\Localization::class])->group(func
     });
 
     Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.settings');
+    Route::post('/profile', [ProfileController::class, 'update'])->name('profile.settings.update');
 
 
     // --- Protected Routes (Requires Auth) ---
